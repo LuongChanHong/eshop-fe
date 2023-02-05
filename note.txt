@@ -1,3 +1,3 @@
 Update app:
-- Tạo các schema cần thiết
-"add necessary schema"
+- Thêm chức năng đăng kí người dùng
+"add signup feature"

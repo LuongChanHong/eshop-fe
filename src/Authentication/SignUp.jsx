@@ -5,7 +5,7 @@ import { Link } from "react-router-dom";
 import UserAPI from "../API/UserAPI";
 import "./Auth.css";
 import queryString from "query-string";
-import MessengerAPI from "../API/MessengerAPI";
+// import MessengerAPI from "../API/MessengerAPI";
 
 SignUp.propTypes = {};
 
@@ -37,6 +37,22 @@ function SignUp(props) {
 
   const onChangePhone = (e) => {
     setPhone(e.target.value);
+  };
+
+  const handleSetError = (errList) => {
+    const errInput = errList.map((item) => item.param);
+    if (errInput.includes("fullname")) {
+      setFullnameError(true);
+    }
+    if (errInput.includes("email")) {
+      setEmailError(true);
+    }
+    if (errInput.includes("password")) {
+      setPasswordError(true);
+    }
+    if (errInput.includes("phone")) {
+      setPhoneError(true);
+    }
   };
 
   const handlerSignUp = (e) => {
@@ -97,8 +113,7 @@ function SignUp(props) {
               setPhoneError(true);
               setPasswordError(false);
             } else {
-              console.log("Thanh Cong");
-
+              // console.log("Thanh Cong");
               const fetchSignUp = async () => {
                 const params = {
                   fullname: fullname,
@@ -110,27 +125,30 @@ function SignUp(props) {
                 const query = "?" + queryString.stringify(params);
 
                 const response = await UserAPI.postSignUp(query);
-                console.log(response);
-
-                setSuccess(true);
+                console.log("response:", response);
+                if (response.data.errors) {
+                  handleSetError(response.data.errors);
+                } else {
+                  setSuccess(true);
+                }
               };
 
               fetchSignUp();
 
               // Hàm này dùng để tạo các conversation cho user và admin
-              const fetchConversation = async () => {
-                const params = {
-                  email: email,
-                  password: password,
-                };
+              // const fetchConversation = async () => {
+              //   const params = {
+              //     email: email,
+              //     password: password,
+              //   };
 
-                const query = "?" + queryString.stringify(params);
+              //   const query = "?" + queryString.stringify(params);
 
-                const response = await MessengerAPI.postConversation(query);
-                console.log(response);
-              };
+              //   const response = await MessengerAPI.postConversation(query);
+              //   console.log(response);
+              // };
 
-              fetchConversation();
+              // fetchConversation();
             }
           }
         }
@@ -149,7 +167,7 @@ function SignUp(props) {
       <div className="container-login100">
         <div className="wrap-login100 p-l-55 p-r-55 p-t-65 p-b-50">
           <span className="login100-form-title p-b-33">Sign Up</span>
-          <div className="d-flex justify-content-center pb-5">
+          <div className="d-flex flex-column justify-content-center pb-5">
             {errorFullname && (
               <span className="text-danger">
                 * Please Check Your Full Name!
