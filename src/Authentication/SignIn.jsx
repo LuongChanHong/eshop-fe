@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useMemo } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
 import { compare } from "bcryptjs";
@@ -14,9 +14,7 @@ function SignIn(props) {
   const listCart = useSelector((state) => state.Cart.listCart);
 
   const [email, setEmail] = useState("");
-
   const [password, setPassword] = useState("");
-
   const [user, setUser] = useState([]);
 
   const [errorEmail, setErrorEmail] = useState(false);
@@ -24,21 +22,20 @@ function SignIn(props) {
   const [errorPassword, setErrorPassword] = useState(false);
 
   const [redirect, setRedirect] = useState(false);
-
   const [checkPush, setCheckPush] = useState(false);
 
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  useEffect(() => {
-    const fetchData = async () => {
-      const response = await UserAPI.getAllData();
-      console.log("response.data:", response.data);
-      setUser(response.data);
-    };
+  // useEffect(() => {
+  //   const fetchData = async () => {
+  //     const response = await UserAPI.getAllData();
+  //     console.log("response.data:", response.data);
+  //     setUser(response.data);
+  //   };
 
-    fetchData();
-  }, []);
+  //   fetchData();
+  // }, []);
 
   const onChangeEmail = (e) => {
     setEmail(e.target.value);
@@ -52,86 +49,82 @@ function SignIn(props) {
     return await compare(password, hashPassword);
   };
 
-  const onSubmit = async (e) => {
-    // e.preventDefault();
+  const checkInputError = () => {
     if (!email) {
       setErrorEmail(true);
-      return;
+      return false;
     } else {
       if (!password) {
         setErrorEmail(false);
         setErrorPassword(true);
-        return;
+        return false;
       } else {
         setErrorPassword(false);
-
         if (!validateEmail(email)) {
           setEmailRegex(true);
-          return;
+          return false;
         } else {
           setEmailRegex(false);
+          return true;
+        }
+      }
+    }
+  };
 
-          const findUser = user.find((value) => {
-            return value.email === email;
-          });
-
-          if (!findUser) {
-            setErrorEmail(true);
-            return;
-          } else {
-            setErrorEmail(false);
-
-            const isEqual = await comparePassword(password, findUser.password);
-            if (!isEqual) {
-              setErrorPassword(true);
-              return;
-            } else {
-              setErrorPassword(false);
-
-              localStorage.setItem("id_user", findUser._id);
-
-              localStorage.setItem("name_user", findUser.fullname);
-              const action = addSession(localStorage.getItem("id_user"));
-              dispatch(action);
-
-              setCheckPush(true);
-              console.log("redirect:", redirect);
-              if (redirect) {
-                navigate("/");
-              }
-            }
-          }
+  const onSubmit = async (e) => {
+    // e.preventDefault();
+    const isAnyInputError = checkInputError();
+    if (isAnyInputError) {
+      const response = await UserAPI.postSignIn({
+        email: email,
+        password: password,
+      });
+      console.log("response.data:", response.data);
+      let data = response.data;
+      // Trường hợp đăng nhập thành công, server trả về
+      if (data.cookie) {
+        localStorage.setItem("id_user", data.userId);
+        const action = addSession(localStorage.getItem("id_user"));
+        dispatch(action);
+      } else {
+        if (data.msg.toLowerCase().includes("email")) {
+          setErrorEmail(true);
+          setErrorPassword(false);
+        }
+        if (data.msg.toLowerCase().includes("password")) {
+          setErrorPassword(true);
+          setErrorEmail(false);
         }
       }
     }
   };
 
   //Hàm này dùng để đưa hết tất cả carts vào API của user
-  useEffect(() => {
-    console.log("checkPush:", checkPush);
-    const fetchData = async () => {
-      //Lần đầu sẽ không thực hiện insert được vì addCart = ''
-      if (checkPush === true) {
-        for (let i = 0; i < listCart.length; i++) {
-          //Nó sẽ lấy idUser và idProduct và count cần thêm để gửi lên server
-          const params = {
-            idUser: localStorage.getItem("id_user"),
-            idProduct: listCart[i].idProduct,
-            count: listCart[i].count,
-          };
+  // useEffect(() => {
+  //   console.log("checkPush:", checkPush);
+  //   const fetchData = async () => {
+  //     //Lần đầu sẽ không thực hiện insert được vì addCart = ''
+  //     if (checkPush === true) {
+  //       for (let i = 0; i < listCart.length; i++) {
+  //         //Nó sẽ lấy idUser và idProduct và count cần thêm để gửi lên server
+  //         const params = {
+  //           idUser: localStorage.getItem("id_user"),
+  //           idProduct: listCart[i].idProduct,
+  //           count: listCart[i].count,
+  //         };
 
-          const query = "?" + queryString.stringify(params);
+  //         const query = "?" + queryString.stringify(params);
 
-          const response = await CartAPI.postAddToCart(query);
-          console.log(response);
-        }
+  //         const response = await CartAPI.postAddToCart(query);
+  //         console.log(response);
+  //       }
 
-        setRedirect(true);
-      }
-    };
+  //       setRedirect(true);
+  //     }
+  //   };
 
-    fetchData();
-  }, [checkPush]);
+  //   fetchData();
+  // }, [checkPush]);
 
   function validateEmail(email) {
     const re =
@@ -141,7 +134,7 @@ function SignIn(props) {
 
   const errorRender = () => {
     return (
-      <div className="d-flex justify-content-center pb-5">
+      <div className="d-flex flex-column align-items-center justify-content-center pb-5">
         {emailRegex && (
           <span className="text-danger">* Incorrect Email Format</span>
         )}

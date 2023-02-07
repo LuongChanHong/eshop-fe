@@ -7,12 +7,12 @@ const ReducerSession = (state = initialState, action) => {
     case "ADD_SESSION":
       console.log("idUser: ", action.data);
 
-      // const stateLogin = [...state.idUser];
-      // stateLogin.idUser = action.data;
-      // return { ...stateLogin };
+      const stateLogin = [...state.idUser];
+      stateLogin.idUser = action.data;
+      return { ...stateLogin };
 
-      state.idUser = action.data;
-      return { ...state };
+    // state.idUser = action.data;
+    // return { ...state };
 
     case "DELETE_SESSION":
       console.log("idUser: ", action.data);

@@ -1,3 +1,3 @@
 Update app:
-- Thêm chức năng đăng kí người dùng
-"add signup feature"
+- Thêm chức năng đăng nhập người dùng
+"add login feature"
