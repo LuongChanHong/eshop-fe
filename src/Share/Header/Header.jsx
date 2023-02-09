@@ -1,7 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { addUser } from "../../Redux/Action/ActionCart";
-import { addSession } from "../../Redux/Action/ActionSession";
+import { useSelector } from "react-redux";
 
 import { Link } from "react-router-dom";
 import LoginLink from "../../Authentication/LoginLink";
@@ -10,33 +8,10 @@ import Name from "../../Authentication/Name";
 
 function Header(props) {
   const [active, setActive] = useState("Home");
-
-  const dispatch = useDispatch();
-
-  //Sau khi F5 nó sẽ kiểm tra nếu phiên làm việc của Session vẫn còn thì nó sẽ tiếp tục
-  // đưa dữ liệu vào Redux
-  if (localStorage.getItem("id_user")) {
-    const action = addSession(localStorage.getItem("id_user"));
-    dispatch(action);
-  } else {
-    //Đưa idTemp vào Redux temp để tạm lưu trữ
-    localStorage.setItem("id_temp", "abc999");
-    const action = addUser(localStorage.getItem("id_temp"));
-    dispatch(action);
-  }
-
-  //Get IdUser từ redux khi user đã đăng nhập
-  var idUser = useSelector((state) => state.Session.idUser);
-
-  //Get idtemp từ redux khi user chưa đăng nhập
-  // var idTemp = useSelector((state) => state.Cart.id_user);
-
-  // console.log(idUser);
-
-  // console.log(idTemp);
-
   const [loginUser, setLoginUser] = useState(false);
   const [nameUser, setNameUser] = useState(false);
+
+  const idUser = useSelector((state) => state);
 
   useEffect(() => {
     if (!idUser) {

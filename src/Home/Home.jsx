@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
-import ProductAPI from "../API/ProductAPI";
+// import ProductAPI from "../API/ProductAPI";
+import { getAllProduct } from "../Redux/Actions/productAction";
 import Image from "../Share/img/Image";
 import convertMoney from "../convertMoney";
 import { Link } from "react-router-dom";
@@ -10,10 +11,13 @@ function Home(props) {
   //Fetch Product
   useEffect(() => {
     const fetchData = async () => {
-      const response = await ProductAPI.getAPI();
-      // console.log("response:", response);
-      const data = response.data.splice(0, 8);
-      setProducts(data);
+      const response = await getAllProduct();
+      console.log(response);
+      response.then((res) => {
+        console.log(res);
+      });
+      // const data = response.data.splice(0, 8);
+      // setProducts(data);
     };
 
     fetchData();

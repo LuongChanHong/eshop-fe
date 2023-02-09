@@ -3,7 +3,7 @@ import ProductAPI from "../API/ProductAPI";
 import { Link, useParams } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import alertify from "alertifyjs";
-import { addCart } from "../Redux/Action/ActionCart";
+// import { addCart } from "../Redux/Action/ActionCart";
 import CartAPI from "../API/CartAPI";
 import queryString from "query-string";
 import CommentAPI from "../API/CommentAPI";
@@ -208,7 +208,7 @@ function Detail(props) {
 
       fetchPost();
     } else {
-      const action = addCart(data);
+      // const action = addCart(data);
       dispatch(action);
     }
 

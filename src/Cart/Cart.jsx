@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { deleteCart, updateCart } from "../Redux/Action/ActionCart";
+// import { deleteCart, updateCart } from "../Redux/Action/ActionCart";
 import ListCart from "./Component/ListCart";
 import alertify from "alertifyjs";
 // import { Link, Redirect } from 'react-router-dom';

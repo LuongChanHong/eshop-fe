@@ -1,10 +1,11 @@
-import React, { useEffect, useState, useMemo } from "react";
+import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
 import { compare } from "bcryptjs";
 
-import UserAPI from "../API/UserAPI";
-import { addSession } from "../Redux/Action/ActionSession";
+import { signInAction } from "../Redux/Actions/userAction";
+
+// import { addSession } from "../Redux/Action/ActionSession";
 import "./Auth.css";
 import queryString from "query-string";
 import CartAPI from "../API/CartAPI";
@@ -75,7 +76,7 @@ function SignIn(props) {
     // e.preventDefault();
     const isAnyInputError = checkInputError();
     if (isAnyInputError) {
-      const response = await UserAPI.postSignIn({
+      const response = signInAction({
         email: email,
         password: password,
       });
@@ -84,8 +85,8 @@ function SignIn(props) {
       // Trường hợp đăng nhập thành công, server trả về
       if (data.cookie) {
         localStorage.setItem("id_user", data.userId);
-        const action = addSession(localStorage.getItem("id_user"));
-        dispatch(action);
+        // const action = signInAction(localStorage.getItem("id_user"));
+        // dispatch(action);
       } else {
         if (data.msg.toLowerCase().includes("email")) {
           setErrorEmail(true);
