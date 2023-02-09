@@ -9,6 +9,9 @@ const reducer = (state = initialState, action) => {
     case USER.SIGN_IN:
       state.userId = action.payload;
       return { ...state };
+    case USER.SIGN_OUT:
+      state.userId = "";
+      return { ...state };
     default:
       return state;
   }

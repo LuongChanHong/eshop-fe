@@ -7,10 +7,10 @@ export class UserService extends baseService {
     super();
   }
   signIn = (data) => {
-    return this.post("/login", data);
+    return this.post("/user/login", data);
   };
   signUp = (data) => {
-    return this.post("signup", data);
+    return this.post("/user/signup", data);
   };
 }
 

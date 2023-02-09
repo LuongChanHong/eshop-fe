@@ -1,18 +1,18 @@
 import React from "react";
 import { useDispatch } from "react-redux";
-// import { Link, Redirect } from 'react-router-dom';
 import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
-// import { deleteSession } from "../Redux/Action/ActionSession";
+import { signOutAction } from "../Redux/Actions/userAction";
 
 function LoginLink(props) {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   const onRedirect = () => {
     localStorage.clear();
-
-    // const action = deleteSession("");
-    // dispatch(action);
+    dispatch(signOutAction());
+    navigate("/signin");
   };
 
   return (

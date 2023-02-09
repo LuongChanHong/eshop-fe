@@ -1,3 +1,3 @@
 Update app:
-- hiện dữ liệu lên trang Home
-"render data Home page"
+- thêm chức năng đăng nhập
+"add login feature"

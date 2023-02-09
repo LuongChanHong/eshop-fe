@@ -5,7 +5,7 @@ export class ProductService extends baseService {
     super();
   }
   getAllProduct = () => {
-    return this.get("/products/getAllProducts");
+    return this.get("/product/getAllProducts");
   };
 }
 

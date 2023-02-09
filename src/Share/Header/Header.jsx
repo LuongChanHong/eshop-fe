@@ -11,7 +11,7 @@ function Header(props) {
   const [loginUser, setLoginUser] = useState(false);
   const [nameUser, setNameUser] = useState(false);
 
-  const idUser = useSelector((state) => state);
+  const idUser = useSelector((state) => state.user.userId);
 
   useEffect(() => {
     if (!idUser) {

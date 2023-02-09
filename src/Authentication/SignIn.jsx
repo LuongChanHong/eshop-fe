@@ -12,7 +12,7 @@ import CartAPI from "../API/CartAPI";
 
 function SignIn(props) {
   //listCart được lấy từ redux
-  const listCart = useSelector((state) => state.Cart.listCart);
+  // const listCart = useSelector((state) => state.Cart.listCart);
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -46,10 +46,6 @@ function SignIn(props) {
     setPassword(e.target.value);
   };
 
-  const comparePassword = async (password, hashPassword) => {
-    return await compare(password, hashPassword);
-  };
-
   const checkInputError = () => {
     if (!email) {
       setErrorEmail(true);
@@ -76,27 +72,31 @@ function SignIn(props) {
     // e.preventDefault();
     const isAnyInputError = checkInputError();
     if (isAnyInputError) {
-      const response = signInAction({
-        email: email,
-        password: password,
+      const response = dispatch(
+        signInAction({
+          email: email,
+          password: password,
+        })
+      );
+
+      response.then((data) => {
+        console.log("data:", data);
+
+        // Trường hợp đăng nhập thành công, server trả về
+        if (data.userId) {
+          localStorage.setItem("id_user", data.userId);
+          navigate("/");
+        } else {
+          if (data.msg.toLowerCase().includes("email")) {
+            setErrorEmail(true);
+            setErrorPassword(false);
+          }
+          if (data.msg.toLowerCase().includes("password")) {
+            setErrorPassword(true);
+            setErrorEmail(false);
+          }
+        }
       });
-      console.log("response.data:", response.data);
-      let data = response.data;
-      // Trường hợp đăng nhập thành công, server trả về
-      if (data.cookie) {
-        localStorage.setItem("id_user", data.userId);
-        // const action = signInAction(localStorage.getItem("id_user"));
-        // dispatch(action);
-      } else {
-        if (data.msg.toLowerCase().includes("email")) {
-          setErrorEmail(true);
-          setErrorPassword(false);
-        }
-        if (data.msg.toLowerCase().includes("password")) {
-          setErrorPassword(true);
-          setErrorEmail(false);
-        }
-      }
     }
   };
 
