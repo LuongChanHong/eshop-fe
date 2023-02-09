@@ -11,7 +11,7 @@ function LoginLink(props) {
 
   const onRedirect = () => {
     localStorage.clear();
-    dispatch(signOutAction());
+    signOutAction(dispatch);
     navigate("/signin");
   };
 

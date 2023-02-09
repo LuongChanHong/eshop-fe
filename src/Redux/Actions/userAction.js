@@ -16,16 +16,25 @@ export const signInAction = (data) => {
   };
 };
 
-export const signOutAction = () => {
-  return async (dispatch) => {
-    try {
-      dispatch(createAction(USER.SIGN_OUT));
-    } catch (error) {
-      console.log(error);
-      alert(error.response.data);
-    }
-  };
+export const signOutAction = (dispatch) => {
+  try {
+    dispatch(createAction(USER.SIGN_OUT));
+  } catch (error) {
+    console.log(error);
+    alert(error.response.data);
+  }
 };
+
+// export const signOutAction = () => {
+//   return async (dispatch) => {
+//     try {
+//       dispatch(createAction(USER.SIGN_OUT));
+//     } catch (error) {
+//       console.log(error);
+//       alert(error.response.data);
+//     }
+//   };
+// };
 
 export const signUpAction = (thongTinDangKi, callBack) => {
   return async (dispatch) => {

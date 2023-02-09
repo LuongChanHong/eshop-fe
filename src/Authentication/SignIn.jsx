@@ -80,8 +80,7 @@ function SignIn(props) {
       );
 
       response.then((data) => {
-        console.log("data:", data);
-
+        // console.log("data:", data);
         // Trường hợp đăng nhập thành công, server trả về
         if (data.userId) {
           localStorage.setItem("id_user", data.userId);
