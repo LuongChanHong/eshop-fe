@@ -11,8 +11,8 @@ function LoginLink(props) {
   const onRedirect = () => {
     localStorage.clear();
 
-    const action = deleteSession("");
-    dispatch(action);
+    // const action = deleteSession("");
+    // dispatch(action);
   };
 
   return (

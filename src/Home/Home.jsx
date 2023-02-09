@@ -12,12 +12,9 @@ function Home(props) {
   useEffect(() => {
     const fetchData = async () => {
       const response = await getAllProduct();
-      console.log(response);
-      response.then((res) => {
-        console.log(res);
-      });
-      // const data = response.data.splice(0, 8);
-      // setProducts(data);
+      console.log(response.data);
+      const data = response.data.splice(0, 8);
+      setProducts(data);
     };
 
     fetchData();
