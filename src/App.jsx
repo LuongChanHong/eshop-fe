@@ -10,7 +10,7 @@ import Home from "./Home/Home";
 import SignIn from "./Authentication/SignIn";
 import SignUp from "./Authentication/SignUp";
 import Shop from "./Shop/Shop";
-// import Detail from "./Detail/Detail";
+import Detail from "./Detail/Detail";
 // import Cart from "./Cart/Cart";
 // import Checkout from "./Checkout/Checkout";
 // import History from "./History/History";
@@ -23,7 +23,7 @@ function App() {
         <Header />
         <Routes>
           <Route exact path="/" element={<Home />} />
-          {/* <Route exact path="/detail/:id" element={<Detail />} /> */}
+          <Route exact path="/detail/:id" element={<Detail />} />
           {/* <Route exact path="/cart" element={<Cart />} /> */}
           <Route exact path="/signin" element={<SignIn />} />
           <Route exact path="/signup" element={<SignUp />} />

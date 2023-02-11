@@ -7,6 +7,9 @@ export class ProductService extends baseService {
   getAllProduct = () => {
     return this.get("/product/getAllProducts");
   };
+  getProductDetail = (id) => {
+    return this.get(`/product/getProductDetail?id=${id}`);
+  };
 }
 
 export const productService = new ProductService();

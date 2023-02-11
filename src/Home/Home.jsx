@@ -13,7 +13,7 @@ function Home(props) {
     const fetchData = async () => {
       const response = await getAllProduct();
       console.log(response.data);
-      const data = response.data.splice(0, 8);
+      const data = response.splice(0, 8);
       setProducts(data);
     };
 
