@@ -1,10 +1,7 @@
 import React, { useEffect, useState } from "react";
 // import ProductAPI from "../API/ProductAPI";
-import {
-  getProductDetail,
-  getAllProduct,
-} from "../Redux/Actions/productAction";
-import { Link, useParams } from "react-router-dom";
+
+import { Link, useParams, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 // import alertify from "alertifyjs";
 // import { addCart } from "../Redux/Action/ActionCart";
@@ -13,13 +10,23 @@ import { useDispatch, useSelector } from "react-redux";
 // import CommentAPI from "../API/CommentAPI";
 import convertMoney from "../convertMoney";
 
+import {
+  getProductDetail,
+  getAllProduct,
+} from "../Redux/Actions/productAction";
+
+import { addToCart } from "../Redux/Actions/cartAction";
+
 function Detail(props) {
   const [detail, setDetail] = useState({});
 
   const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   //id params cho từng sản phẩm
   const { id } = useParams();
+
+  const userId = useSelector((state) => state.user.userId);
 
   //id_user được lấy từ redux
   // const id_user = useSelector((state) => state.Cart.id_user);
@@ -29,18 +36,18 @@ function Detail(props) {
 
   const [product, setProduct] = useState([]);
 
-  const [star, setStar] = useState(1);
+  // const [star, setStar] = useState(1);
 
-  const [comment, setComment] = useState("");
+  // const [comment, setComment] = useState("");
 
   // id_user đã đăng nhập
   // const idUser = useSelector((state) => state.Session.idUser);
 
   // Listcomment
-  const [list_comment, set_list_comment] = useState([]);
+  // const [list_comment, set_list_comment] = useState([]);
 
   // state này dùng để load lại comment khi user gửi comment lên
-  const [load_comment, set_load_comment] = useState(false);
+  // const [load_comment, set_load_comment] = useState(false);
 
   // Hàm này dùng để lấy dữ liệu comment
   // Hàm này sẽ chạy lại phụ thuộc vào id Param
@@ -62,14 +69,14 @@ function Detail(props) {
   // }, [id]);
 
   // Hàm thay đổi sao đánh giá
-  const onChangeStar = (e) => {
-    setStar(e.target.value);
-  };
+  // const onChangeStar = (e) => {
+  //   setStar(e.target.value);
+  // };
 
   // Hàm thay đổi comment
-  const onChangeComment = (e) => {
-    setComment(e.target.value);
-  };
+  // const onChangeComment = (e) => {
+  //   setComment(e.target.value);
+  // };
 
   // Hàm này dùng để bình luận
   // const handlerComment = () => {
@@ -125,6 +132,7 @@ function Detail(props) {
   // }, [load_comment]);
 
   //Hàm này gọi API và cắt chỉ lấy 4 sản phẩm
+
   useEffect(() => {
     const fetchData = async () => {
       const response = await getAllProduct();
@@ -136,25 +144,22 @@ function Detail(props) {
   }, []);
 
   //Phần này là để thay đổi số lượng khi mua sản phẩm
-  const [text, setText] = useState(1);
+  const [quantity, setQuantity] = useState(1);
   const onChangeText = (e) => {
-    setText(e.target.value);
+    setQuantity(e.target.value);
   };
 
   //Tăng lên 1 đơn vị
-  const upText = () => {
-    const value = parseInt(text) + 1;
-
-    setText(value);
+  const addQuantity = () => {
+    const value = parseInt(quantity) + 1;
+    setQuantity(value);
   };
 
   //Giảm 1 đơn vị
-  const downText = () => {
-    const value = parseInt(text) - 1;
-
+  const minusQuantity = () => {
+    const value = parseInt(quantity) - 1;
     if (value === 0) return;
-
-    setText(value);
+    setQuantity(value);
   };
 
   //Hàm này để lấy dữ liệu chi tiết sản phẩm
@@ -175,57 +180,55 @@ function Detail(props) {
   };
 
   //Hàm này là Thêm Sản Phẩm
-  // const addToCart = () => {
-  //   let id_user_cart = "";
+  const handleAddToCart = () => {
+    if (userId === "") {
+      navigate("/signin");
+    }
 
-  //   if (localStorage.getItem("id_user")) {
-  //     id_user_cart = localStorage.getItem("id_user");
-  //   } else {
-  //     id_user_cart = id_user;
-  //   }
-
-  //   const data = {
-  //     idUser: id_user_cart,
-  //     idProduct: detail._id,
-  //     nameProduct: detail.name,
-  //     priceProduct: detail.price,
-  //     count: text,
-  //     img: detail.img1,
-  //   };
-
-  //   // if (localStorage.getItem("id_user")) {
-  //   //   console.log("Bạn Đã Đăng Nhập!");
-
-  //   //   const fetchPost = async () => {
-  //   //     const params = {
-  //   //       idUser: id_user_cart, //localStorage.getItem('id_user')
-  //   //       idProduct: detail._id, // Lấy idProduct
-  //   //       count: text, // Lấy số lượng
-  //   //     };
-
-  //   //     const query = "?" + queryString.stringify(params);
-
-  //   //     const response = await CartAPI.postAddToCart(query);
-
-  //   //     console.log(response);
-  //   //   };
-
-  //   //   fetchPost();
-  //   // } else {
-  //   //   // const action = addCart(data);
-  //   //   // dispatch(action);
-  //   // }
-
-  //   alertify.set("notifier", "position", "bottom-left");
-  //   alertify.success("Bạn Đã Thêm Hàng Thành Công!");
-  // };
+    const selectedItem = {
+      productId: detail._id,
+      productName: detail.name,
+      price: detail.price,
+      quantity: quantity,
+      img: detail.img1,
+    };
+    addToCart(dispatch, selectedItem);
+    // let id_user_cart = "";
+    // if (localStorage.getItem("id_user")) {
+    //   id_user_cart = localStorage.getItem("id_user");
+    // } else {
+    //   id_user_cart = id_user;
+    // }
+    // if (localStorage.getItem("id_user")) {
+    //   console.log("Bạn Đã Đăng Nhập!");
+    //   const fetchPost = async () => {
+    //     const params = {
+    //       idUser: id_user_cart, //localStorage.getItem('id_user')
+    //       idProduct: detail._id, // Lấy idProduct
+    //       count: text, // Lấy số lượng
+    //     };
+    //     const query = "?" + queryString.stringify(params);
+    //     const response = await CartAPI.postAddToCart(query);
+    //     console.log(response);
+    //   };
+    //   fetchPost();
+    // } else {
+    //   // const action = addCart(data);
+    //   // dispatch(action);
+    // }
+    // alertify.set("notifier", "position", "bottom-left");
+    // alertify.success("Bạn Đã Thêm Hàng Thành Công!");
+  };
 
   return (
     <section className="py-5">
       <div className="container">
+        {/* PRODUCT IMAGE AND DETAIL - START */}
         <div className="row mb-5">
+          {/* CAROUSEL - START */}
           <div className="col-lg-6">
             <div className="row m-sm-0">
+              {/* image list - start */}
               <div className="col-sm-2 p-sm-0 order-2 order-sm-1 mt-2 mt-sm-0">
                 <div
                   className="owl-thumbs d-flex flex-row flex-sm-column"
@@ -245,7 +248,9 @@ function Detail(props) {
                   </div>
                 </div>
               </div>
+              {/* image list - end */}
 
+              {/* carousel and control button - start */}
               <div
                 id="carouselExampleControls"
                 className="carousel slide col-sm-10 order-1 order-sm-2"
@@ -306,8 +311,12 @@ function Detail(props) {
                   <span className="sr-only">Next</span>
                 </a>
               </div>
+              {/* carousel and control button - end */}
             </div>
           </div>
+          {/* CAROUSEL - END */}
+
+          {/* PRODUCT DETAIL - START */}
           <div className="col-lg-6">
             <br></br>
             <h1>{detail.name}</h1>
@@ -332,19 +341,25 @@ function Detail(props) {
                       className="dec-btn p-0"
                       style={{ cursor: "pointer" }}
                     >
-                      <i className="fas fa-caret-left" onClick={downText}></i>
+                      <i
+                        className="fas fa-caret-left"
+                        onClick={minusQuantity}
+                      ></i>
                     </button>
                     <input
                       className="form-control border-0 shadow-0 p-0"
                       type="text"
-                      value={text}
+                      value={quantity}
                       onChange={onChangeText}
                     />
                     <button
                       className="inc-btn p-0"
                       style={{ cursor: "pointer" }}
                     >
-                      <i className="fas fa-caret-right" onClick={upText}></i>
+                      <i
+                        className="fas fa-caret-right"
+                        onClick={addQuantity}
+                      ></i>
                     </button>
                   </div>
                 </div>
@@ -352,7 +367,7 @@ function Detail(props) {
               <div className="col-sm-3 pl-sm-0">
                 <a
                   className="btn btn-dark btn-sm btn-block d-flex align-items-center justify-content-center px-0 text-white"
-                  // onClick={addToCart}
+                  onClick={() => handleAddToCart()}
                 >
                   Add to cart
                 </a>
@@ -361,40 +376,50 @@ function Detail(props) {
               <br></br>
             </div>
           </div>
+          {/* PRODUCT DETAIL - END */}
         </div>
-        {/* <div className='form-group'>
-					<label htmlFor='exampleFormControlTextarea1'>Comment:</label>
-					<textarea
-						className='form-control'
-						rows='3'
-						onChange={onChangeComment}
-						value={comment}></textarea>
-				</div> */}
-        {/* <div className='d-flex justify-content-between'>
-					<div className='d-flex w-25'>
-						<span className='mt-2'>Evaluate: </span>
-						&nbsp; &nbsp;
-						<input
-							className='form-control w-25'
-							type='number'
-							min='1'
-							max='5'
-							value={star}
-							onChange={onChangeStar}
-						/>
-						&nbsp; &nbsp;
-						<span className='mt-2'>Star</span>
-					</div>
-					<div>
-						<a
-							className='btn btn-dark btn-sm btn-block px-0 text-white'
-							style={{ width: '12rem' }}
-							onClick={handlerComment}>
-							Send
-						</a>
-					</div>
-				</div> */}
+        {/* PRODUCT IMAGE AND DETAIL - END */}
+
+        {/* COMMENT FORM - START */}
+        {/* <div className="form-group">
+          <label htmlFor="exampleFormControlTextarea1">Comment:</label>
+          <textarea
+            className="form-control"
+            rows="3"
+            onChange={onChangeComment}
+            value={comment}
+          ></textarea>
+        </div>
+        <div className="d-flex justify-content-between">
+          <div className="d-flex w-25">
+            <span className="mt-2">Evaluate: </span>
+            &nbsp; &nbsp;
+            <input
+              className="form-control w-25"
+              type="number"
+              min="1"
+              max="5"
+              value={star}
+              onChange={onChangeStar}
+            />
+            &nbsp; &nbsp;
+            <span className="mt-2">Star</span>
+          </div>
+          <div>
+            <a
+              className="btn btn-dark btn-sm btn-block px-0 text-white"
+              style={{ width: "12rem" }}
+              onClick={handlerComment}
+            >
+              Send
+            </a>
+          </div>
+        </div> */}
+        {/* COMMENT FORM - END */}
+
         <br />
+
+        {/* DESCRIPTION AND COMMENT - START */}
         <ul className="nav nav-tabs border-0">
           <li className="nav-item">
             <a
@@ -409,18 +434,19 @@ function Detail(props) {
               Description
             </a>
           </li>
-          {/* <li className='nav-item'>
-						<a
-							className='nav-link fix_comment'
-							onClick={() => handlerReview('review')}
-							style={
-								review === 'review'
-									? { backgroundColor: '#383838', color: '#ffffff' }
-									: { color: '#383838' }
-							}>
-							Reviews
-						</a>
-					</li> */}
+          {/* <li className="nav-item">
+            <a
+              className="nav-link fix_comment"
+              onClick={() => handlerReview("review")}
+              style={
+                review === "review"
+                  ? { backgroundColor: "#383838", color: "#ffffff" }
+                  : { color: "#383838" }
+              }
+            >
+              Reviews
+            </a>
+          </li> */}
         </ul>
         <div className="tab-content mb-5">
           {review === "description" ? (
@@ -437,55 +463,59 @@ function Detail(props) {
               </div>
             </div>
           ) : (
-            <div className="tab-pane fade show active">
-              <div className="p-4 p-lg-5 bg-white">
-                <div className="row">
-                  <div className="col-lg-8">
-                    {list_comment &&
-                      list_comment.map((value) => (
-                        <div className="media mb-3" key={value._id}>
-                          <img
-                            className="rounded-circle"
-                            src="https://img.icons8.com/color/36/000000/administrator-male.png"
-                            alt=""
-                            width="50"
-                          />
-                          <div className="media-body ml-3">
-                            <h6 className="mb-0 text-uppercase">
-                              {value.fullname}
-                            </h6>
-                            <p className="small text-muted mb-0 text-uppercase">
-                              dd/mm/yyyy
-                            </p>
-                            <ul className="list-inline mb-1 text-xs">
-                              <li className="list-inline-item m-0">
-                                <i className={value.star1}></i>
-                              </li>
-                              <li className="list-inline-item m-0">
-                                <i className={value.star2}></i>
-                              </li>
-                              <li className="list-inline-item m-0">
-                                <i className={value.star3}></i>
-                              </li>
-                              <li className="list-inline-item m-0">
-                                <i className={value.star4}></i>
-                              </li>
-                              <li className="list-inline-item m-0">
-                                <i className={value.star5}></i>
-                              </li>
-                            </ul>
-                            <p className="text-small mb-0 text-muted">
-                              {value.content}
-                            </p>
-                          </div>
-                        </div>
-                      ))}
-                  </div>
-                </div>
-              </div>
-            </div>
+            <></>
+            // <div className="tab-pane fade show active">
+            //   <div className="p-4 p-lg-5 bg-white">
+            //     <div className="row">
+            //       <div className="col-lg-8">
+            //         {list_comment &&
+            //           list_comment.map((value) => (
+            //             <div className="media mb-3" key={value._id}>
+            //               <img
+            //                 className="rounded-circle"
+            //                 src="https://img.icons8.com/color/36/000000/administrator-male.png"
+            //                 alt=""
+            //                 width="50"
+            //               />
+            //               <div className="media-body ml-3">
+            //                 <h6 className="mb-0 text-uppercase">
+            //                   {value.fullname}
+            //                 </h6>
+            //                 <p className="small text-muted mb-0 text-uppercase">
+            //                   dd/mm/yyyy
+            //                 </p>
+            //                 <ul className="list-inline mb-1 text-xs">
+            //                   <li className="list-inline-item m-0">
+            //                     <i className={value.star1}></i>
+            //                   </li>
+            //                   <li className="list-inline-item m-0">
+            //                     <i className={value.star2}></i>
+            //                   </li>
+            //                   <li className="list-inline-item m-0">
+            //                     <i className={value.star3}></i>
+            //                   </li>
+            //                   <li className="list-inline-item m-0">
+            //                     <i className={value.star4}></i>
+            //                   </li>
+            //                   <li className="list-inline-item m-0">
+            //                     <i className={value.star5}></i>
+            //                   </li>
+            //                 </ul>
+            //                 <p className="text-small mb-0 text-muted">
+            //                   {value.content}
+            //                 </p>
+            //               </div>
+            //             </div>
+            //           ))}
+            //       </div>
+            //     </div>
+            //   </div>
+            // </div>
           )}
         </div>
+        {/* DESCRIPTION AND COMMENT - END */}
+
+        {/* RELATED PRODUCTS - START */}
         <h2 className="h5 text-uppercase mb-4">Related products</h2>
         <div className="row">
           {product &&
@@ -521,6 +551,7 @@ function Detail(props) {
                 </div>
               ))}
         </div>
+        {/* RELATED PRODUCTS - END */}
       </div>
     </section>
   );

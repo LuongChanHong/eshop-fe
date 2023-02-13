@@ -5,6 +5,7 @@ import storage from "redux-persist/lib/storage";
 import autoMergeLevel2 from "redux-persist/lib/stateReconciler/autoMergeLevel2";
 
 import user from "./Reducers/userReducer";
+import cart from "./Reducers/cartReducer";
 
 const persistConfig = {
   key: "root",
@@ -17,6 +18,7 @@ const reducer = combineReducers({
   // course,
   // LoadingReducer,
   user,
+  cart,
 });
 
 const _persistReducer = persistReducer(persistConfig, reducer);

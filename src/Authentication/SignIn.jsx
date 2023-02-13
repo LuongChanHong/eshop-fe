@@ -84,7 +84,7 @@ function SignIn(props) {
         // Trường hợp đăng nhập thành công, server trả về
         if (data.userId) {
           localStorage.setItem("id_user", data.userId);
-          navigate("/");
+          navigate(-1);
         } else {
           if (data.msg.toLowerCase().includes("email")) {
             setErrorEmail(true);
