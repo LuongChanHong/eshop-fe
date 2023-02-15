@@ -4,6 +4,7 @@ import { Link } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 
 import { signOutAction } from "../Redux/Actions/userAction";
+import { resetCart } from "../Redux/Actions/cartAction";
 
 function LoginLink(props) {
   const dispatch = useDispatch();
@@ -12,6 +13,7 @@ function LoginLink(props) {
   const onRedirect = () => {
     localStorage.clear();
     signOutAction(dispatch);
+    resetCart(dispatch);
     navigate("/signin");
   };
 

@@ -25,28 +25,12 @@ export const signOutAction = (dispatch) => {
   }
 };
 
-// export const signOutAction = () => {
-//   return async (dispatch) => {
-//     try {
-//       dispatch(createAction(USER.SIGN_OUT));
-//     } catch (error) {
-//       console.log(error);
-//       alert(error.response.data);
-//     }
-//   };
-// };
-
-export const signUpAction = (thongTinDangKi, callBack) => {
-  return async (dispatch) => {
-    try {
-      const result = await userService.signUp(thongTinDangKi);
-      dispatch(createAction(USER.SIGN_OUT));
-      callBack();
-
-      alert("Đăng kí thành công");
-    } catch (err) {
-      console.log(err);
-      alert(err.response.data);
-    }
-  };
+export const getInfo = async (id) => {
+  try {
+    const result = await userService.getInfo(id);
+    // console.log("result.data:", result.data);
+    return result.data;
+  } catch (error) {
+    console.log(error);
+  }
 };

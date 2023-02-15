@@ -69,7 +69,6 @@ const reducer = (state = initalState, action) => {
 
     case "RESET_CART":
       state = {
-        userId: "",
         cartItems: [],
       };
       return { ...state };

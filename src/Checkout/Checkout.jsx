@@ -1,16 +1,19 @@
 import React, { useEffect, useState } from "react";
+import { useSelector } from "react-redux";
 import queryString from "query-string";
 import CartAPI from "../API/CartAPI";
 import CheckoutAPI from "../API/CheckoutAPI";
 import convertMoney from "../convertMoney";
 import "./Checkout.css";
 
+import { createOrder } from "../Redux/Actions/orderAction";
+import { getInfo } from "../Redux/Actions/userAction";
+
 // import io from "socket.io-client";
 // const socket = io("http://localhost:5000");
 
 function Checkout(props) {
   const [carts, setCarts] = useState([]);
-
   const [total, setTotal] = useState(0);
 
   const [fullname, setFullname] = useState("");
@@ -18,7 +21,6 @@ function Checkout(props) {
 
   const [email, setEmail] = useState("");
   const [emailError, setEmailError] = useState(false);
-
   const [emailRegex, setEmailRegex] = useState(false);
 
   const [phone, setPhone] = useState("");
@@ -28,63 +30,50 @@ function Checkout(props) {
   const [addressError, setAddressError] = useState(false);
 
   const [success, setSuccess] = useState(false);
-
   const [load, setLoad] = useState(false);
 
+  const cartItems = useSelector((state) => state.cart.cartItems);
+  const userId = useSelector((state) => state.user.userId);
+  // console.log(userId);
+
   //Hàm này dùng để gọi API và render số sản phẩm
-  // useEffect(() => {
-  //   if (localStorage.getItem("id_user")) {
-  //     const fetchData = async () => {
-  //       const params = {
-  //         idUser: localStorage.getItem("id_user"),
-  //       };
+  useEffect(() => {
+    //Hàm này dùng để tính tổng tiền carts
+    function getTotal(cartItems) {
+      let sub_total = 0;
+      cartItems.forEach((item) => {
+        sub_total += item.price * item.quantity;
+      });
 
-  //       const query = "?" + queryString.stringify(params);
+      setTotal(sub_total);
+    }
+    getTotal(cartItems);
 
-  //       const response = await CartAPI.getCarts(query);
+    const getUserInfo = async () => {
+      const response = await getInfo(userId);
+      // console.log("response", response);
+      setFullname(response.fullname);
+      setEmail(response.email);
+      setPhone(response.phone);
+      setAddress(response.address || "");
+    };
+    getUserInfo();
+  }, [cartItems]);
 
-  //       console.log(response);
-
-  //       setCarts(response);
-
-  //       getTotal(response);
-
-  //       if (response.length === 0) {
-  //         window.location.replace("/cart");
-  //       }
-  //     };
-
-  //     fetchData();
-  //   }
-  // }, []);
-
-  //Hàm này dùng để tính tổng tiền carts
-  function getTotal(carts) {
-    let sub_total = 0;
-
-    // const sum_total = carts.map((value) => {
-    //   return (sub_total +=
-    //     parseInt(value.priceProduct) * parseInt(value.count));
-    // });
-
-    setTotal(sub_total);
-  }
-
-  //Check Validation
-  const handlerSubmit = () => {
+  const inputValidation = () => {
     if (!fullname) {
       setFullnameError(true);
       setEmailError(false);
       setPhoneError(false);
       setAddressError(false);
-      return;
+      return false;
     } else {
       if (!email) {
         setFullnameError(false);
         setEmailError(true);
         setPhoneError(false);
         setAddressError(false);
-        return;
+        return false;
       } else {
         setPhoneError(false);
         setAddressError(false);
@@ -96,7 +85,7 @@ function Checkout(props) {
           setEmailError(false);
           setPhoneError(false);
           setAddressError(false);
-          return;
+          return false;
         } else {
           setEmailRegex(false);
 
@@ -105,7 +94,7 @@ function Checkout(props) {
             setEmailError(false);
             setPhoneError(true);
             setAddressError(false);
-            return;
+            return false;
           } else {
             setFullnameError(false);
             setEmailError(false);
@@ -118,13 +107,30 @@ function Checkout(props) {
               setPhoneError(false);
               setAddressError(true);
             } else {
-              console.log("Thanh Cong");
-
-              setLoad(!load);
+              return true;
             }
           }
         }
       }
+    }
+  };
+
+  //Check Validation
+  const handlerSubmit = () => {
+    const isInputValid = inputValidation();
+    if (isInputValid) {
+      console.log("Thanh Cong");
+
+      // setLoad(!load);
+      createOrder({
+        userId: userId,
+        fullname: fullname,
+        email: email,
+        phone: phone,
+        address: address,
+        products: cartItems,
+        totalPrice: total,
+      });
     }
   };
 
@@ -349,17 +355,16 @@ function Checkout(props) {
                   <div className="card-body">
                     <h5 className="text-uppercase mb-4">Your order</h5>
                     <ul className="list-unstyled mb-0">
-                      {carts &&
-                        carts.map((value) => (
-                          <div key={value._id}>
+                      {cartItems &&
+                        cartItems.map((item, i) => (
+                          <div key={i}>
                             <li className="d-flex align-items-center justify-content-between">
                               <strong className="small font-weight-bold">
-                                {value.nameProduct}
+                                {item.productName}
                               </strong>
                               <br></br>
                               <span className="text-muted small">
-                                {convertMoney(value.priceProduct)} VND x{" "}
-                                {value.count}
+                                {convertMoney(item.price)} VND x {item.quantity}
                               </span>
                             </li>
                             <li className="border-bottom my-2"></li>

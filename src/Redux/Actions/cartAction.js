@@ -24,3 +24,11 @@ export const changeItemQuantity = (dispatch, item) => {
     console.log(error);
   }
 };
+
+export const resetCart = (dispatch) => {
+  try {
+    dispatch(createAction(CART.RESET_CART));
+  } catch (error) {
+    console.log(error);
+  }
+};

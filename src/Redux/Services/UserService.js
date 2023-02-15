@@ -12,6 +12,9 @@ export class UserService extends baseService {
   signUp = (data) => {
     return this.post("/user/signup", data);
   };
+  getInfo = (id) => {
+    return this.get(`/user/info?id=${id}`);
+  };
 }
 
 export const userService = new UserService();
