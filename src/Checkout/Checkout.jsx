@@ -32,31 +32,31 @@ function Checkout(props) {
   const [load, setLoad] = useState(false);
 
   //Hàm này dùng để gọi API và render số sản phẩm
-  useEffect(() => {
-    if (localStorage.getItem("id_user")) {
-      const fetchData = async () => {
-        const params = {
-          idUser: localStorage.getItem("id_user"),
-        };
+  // useEffect(() => {
+  //   if (localStorage.getItem("id_user")) {
+  //     const fetchData = async () => {
+  //       const params = {
+  //         idUser: localStorage.getItem("id_user"),
+  //       };
 
-        const query = "?" + queryString.stringify(params);
+  //       const query = "?" + queryString.stringify(params);
 
-        const response = await CartAPI.getCarts(query);
+  //       const response = await CartAPI.getCarts(query);
 
-        console.log(response);
+  //       console.log(response);
 
-        setCarts(response);
+  //       setCarts(response);
 
-        getTotal(response);
+  //       getTotal(response);
 
-        if (response.length === 0) {
-          window.location.replace("/cart");
-        }
-      };
+  //       if (response.length === 0) {
+  //         window.location.replace("/cart");
+  //       }
+  //     };
 
-      fetchData();
-    }
-  }, []);
+  //     fetchData();
+  //   }
+  // }, []);
 
   //Hàm này dùng để tính tổng tiền carts
   function getTotal(carts) {
@@ -129,39 +129,39 @@ function Checkout(props) {
   };
 
   //Hàm này bắt đầu gửi Email xác nhận đơn hàng
-  useEffect(() => {
-    if (load) {
-      const sendMail = async () => {
-        const params = {
-          to: email,
-          fullname: fullname,
-          phone: phone,
-          address: address,
-          idUser: localStorage.getItem("id_user"),
-        };
+  // useEffect(() => {
+  //   if (load) {
+  //     const sendMail = async () => {
+  //       const params = {
+  //         to: email,
+  //         fullname: fullname,
+  //         phone: phone,
+  //         address: address,
+  //         idUser: localStorage.getItem("id_user"),
+  //       };
 
-        const query = "?" + queryString.stringify(params);
+  //       const query = "?" + queryString.stringify(params);
 
-        const response = await CheckoutAPI.postEmail(query);
+  //       const response = await CheckoutAPI.postEmail(query);
 
-        console.log(response);
-      };
+  //       console.log(response);
+  //     };
 
-      sendMail();
+  //     sendMail();
 
-      // const data = localStorage.getItem("id_user");
+  //     // const data = localStorage.getItem("id_user");
 
-      // Gửi socket lên server
-      // socket.emit("send_order", data);
+  //     // Gửi socket lên server
+  //     // socket.emit("send_order", data);
 
-      //Dùng setTimeout delay 3s
-      //Sau 4s nó sẽ thực hiện
-      setTimeout(() => {
-        setSuccess(!success);
-        setLoad(!load);
-      }, 4000);
-    }
-  }, [load]);
+  //     //Dùng setTimeout delay 3s
+  //     //Sau 4s nó sẽ thực hiện
+  //     setTimeout(() => {
+  //       setSuccess(!success);
+  //       setLoad(!load);
+  //     }, 4000);
+  //   }
+  // }, [load]);
 
   const onChangeName = (e) => {
     setFullname(e.target.value);
@@ -196,6 +196,7 @@ function Checkout(props) {
       <div className="container">
         <section className="py-5 bg-light">
           <div className="container">
+            {/* BREADCRUMB - START */}
             <div className="row px-4 px-lg-5 py-lg-4 align-items-center">
               <div className="col-lg-6">
                 <h1 className="h2 text-uppercase mb-0">Checkout</h1>
@@ -204,10 +205,10 @@ function Checkout(props) {
                 <nav aria-label="breadcrumb">
                   <ol className="breadcrumb justify-content-lg-end mb-0 px-0">
                     <li className="breadcrumb-item">
-                      <a href="index.html">Home</a>
+                      <a href="/">Home</a>
                     </li>
                     <li className="breadcrumb-item">
-                      <a href="cart.html">Cart</a>
+                      <a href="/cart">Cart</a>
                     </li>
                     <li className="breadcrumb-item active" aria-current="page">
                       Checkout
@@ -216,6 +217,7 @@ function Checkout(props) {
                 </nav>
               </div>
             </div>
+            {/* BREADCRUMB - END */}
           </div>
         </section>
 
@@ -223,9 +225,11 @@ function Checkout(props) {
           <section className="py-5">
             <h2 className="h5 text-uppercase mb-4">Billing details</h2>
             <div className="row">
+              {/* USER INFO FORM - START */}
               <div className="col-lg-8">
                 <form>
                   <div className="row">
+                    {/* name input - start */}
                     <div className="col-lg-12 form-group">
                       <label
                         className="text-small text-uppercase"
@@ -246,6 +250,9 @@ function Checkout(props) {
                         </span>
                       )}
                     </div>
+                    {/* name input - end */}
+
+                    {/* email input - start */}
                     <div className="col-lg-12 form-group">
                       <label
                         className="text-small text-uppercase"
@@ -271,6 +278,9 @@ function Checkout(props) {
                         </span>
                       )}
                     </div>
+                    {/* email input - end */}
+
+                    {/* phone input - start */}
                     <div className="col-lg-12 form-group">
                       <label
                         className="text-small text-uppercase"
@@ -291,6 +301,9 @@ function Checkout(props) {
                         </span>
                       )}
                     </div>
+                    {/* phone input - end */}
+
+                    {/* address input - start */}
                     <div className="col-lg-12 form-group">
                       <label
                         className="text-small text-uppercase"
@@ -311,6 +324,9 @@ function Checkout(props) {
                         </span>
                       )}
                     </div>
+                    {/* address input - end */}
+
+                    {/* order button - start */}
                     <div className="col-lg-12 form-group">
                       <a
                         className="btn btn-dark"
@@ -321,9 +337,13 @@ function Checkout(props) {
                         Place order
                       </a>
                     </div>
+                    {/* order button - end */}
                   </div>
                 </form>
               </div>
+              {/* USER INFO FORM - END */}
+
+              {/* ORDER DETAIL - START */}
               <div className="col-lg-4">
                 <div className="card border-0 rounded-0 p-lg-4 bg-light">
                   <div className="card-body">
@@ -355,6 +375,7 @@ function Checkout(props) {
                   </div>
                 </div>
               </div>
+              {/* ORDER DETAIL - END */}
             </div>
           </section>
         )}

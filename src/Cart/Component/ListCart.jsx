@@ -4,56 +4,50 @@ import { Link } from "react-router-dom";
 import convertMoney from "../../convertMoney";
 
 ListCart.propTypes = {
-  listCart: PropTypes.array,
-  onDeleteCart: PropTypes.func,
-  onUpdateCount: PropTypes.func,
+  cartItems: PropTypes.array,
+  deleteCartItem: PropTypes.func,
+  updateQuantity: PropTypes.func,
 };
 
 ListCart.defaultProps = {
-  listCart: [],
-  onDeleteCart: null,
-  onUpdateCount: null,
+  cartItems: [],
+  deleteCartItem: null,
+  updateQuantity: null,
 };
 
 function ListCart(props) {
-  const { listCart, onDeleteCart, onUpdateCount } = props;
+  const { cartItems, deleteCartItem, updateQuantity } = props;
 
-  const handlerChangeText = (e) => {
-    console.log(e.target.value);
+  const handlerQuantityChange = (e) => {
+    console.log(e.target.item);
   };
 
-  const handlerDelete = (getUser, getProduct) => {
-    if (!onDeleteCart) {
+  const deleteItem = (productId) => {
+    if (!deleteCartItem) {
       return;
     }
-
-    onDeleteCart(getUser, getProduct);
+    deleteCartItem(productId);
   };
 
-  const handlerDown = (getIdUser, getIdProduct, getCount) => {
-    if (!onUpdateCount) {
+  const reduceQuantity = (productId, quantity) => {
+    if (!updateQuantity) {
       return;
     }
-
-    if (getCount === 1) {
+    if (quantity === 1) {
       return;
     }
-
     //Trước khi trả dữ liệu về component cha thì phải thay đổi biến count
-    const updateCount = parseInt(getCount) - 1;
-
-    onUpdateCount(getIdUser, getIdProduct, updateCount);
+    const updatedQuantity = parseInt(quantity) - 1;
+    updateQuantity(productId, updatedQuantity);
   };
 
-  const handlerUp = (getIdUser, getIdProduct, getCount) => {
-    if (!onUpdateCount) {
+  const addQuantity = (productId, quantity) => {
+    if (!updateQuantity) {
       return;
     }
-
     //Trước khi trả dữ liệu về component cha thì phải thay đổi biến count
-    const updateCount = parseInt(getCount) + 1;
-
-    onUpdateCount(getIdUser, getIdProduct, updateCount);
+    const updatedQuantity = parseInt(quantity) + 1;
+    updateQuantity(productId, updatedQuantity);
   };
 
   return (
@@ -88,42 +82,46 @@ function ListCart(props) {
           </tr>
         </thead>
         <tbody>
-          {listCart &&
-            listCart.map((value, index) => (
+          {cartItems &&
+            cartItems.map((item, index) => (
               <tr className="text-center" key={index}>
+                {/* IMAGE - START */}
                 <td className="pl-0 border-0">
                   <div className="media align-items-center justify-content-center">
                     <Link
                       className="reset-anchor d-block animsition-link"
-                      to={`/detail/${value.idProduct}`}
+                      to={`/detail/${item.idProduct}`}
                     >
-                      <img src={value.img} alt="..." width="70" />
+                      <img src={item.img} alt="..." width="70" />
                     </Link>
                   </div>
                 </td>
+                {/* IMAGE - END */}
+                {/* PRODUCT NAME - START */}
                 <td className="align-middle border-0">
                   <div className="media align-items-center justify-content-center">
                     <Link
                       className="reset-anchor h6 animsition-link"
-                      to={`/detail/${value.idProduct}`}
+                      to={`/detail/${item.idProduct}`}
                     >
-                      {value.nameProduct}
+                      {item.productName}
                     </Link>
                   </div>
                 </td>
-
+                {/* PRODUCT NAME - END */}
+                {/* PRICE - START */}
                 <td className="align-middle border-0">
-                  <p className="mb-0 small">
-                    {convertMoney(value.priceProduct)} VND
-                  </p>
+                  <p className="mb-0 small">{convertMoney(item.price)} VND</p>
                 </td>
+                {/* PRICE - END */}
+                {/* QUANTITY - START */}
                 <td className="align-middle border-0">
                   <div className="quantity justify-content-center">
                     <button
                       className="dec-btn p-0"
                       style={{ cursor: "pointer" }}
                       onClick={() =>
-                        handlerDown(value.idUser, value.idProduct, value.count)
+                        reduceQuantity(item.productId, item.quantity)
                       }
                     >
                       <i className="fas fa-caret-left"></i>
@@ -131,37 +129,39 @@ function ListCart(props) {
                     <input
                       className="form-control form-control-sm border-0 shadow-0 p-0"
                       type="text"
-                      value={value.count}
-                      onChange={handlerChangeText}
+                      value={item.quantity}
+                      onChange={handlerQuantityChange}
                     />
                     <button
                       className="inc-btn p-0"
                       style={{ cursor: "pointer" }}
-                      onClick={() =>
-                        handlerUp(value.idUser, value.idProduct, value.count)
-                      }
+                      onClick={() => addQuantity(item.productId, item.quantity)}
                     >
                       <i className="fas fa-caret-right"></i>
                     </button>
                   </div>
                 </td>
+                {/* QUANTITY - END */}
+                {/* TOTAL PRICE - START */}
                 <td className="align-middle border-0">
                   <p className="mb-0 small">
                     {convertMoney(
-                      parseInt(value.priceProduct) * parseInt(value.count)
+                      parseInt(item.price) * parseInt(item.quantity)
                     )}{" "}
-                    VND
                   </p>
                 </td>
+                {/* TOTAL PRICE - END */}
+                {/* REMOVE PRODUCT BUTTON - START */}
                 <td className="align-middle border-0">
                   <a
                     className="reset-anchor remove_cart"
                     style={{ cursor: "pointer" }}
-                    onClick={() => handlerDelete(value.idUser, value.idProduct)}
+                    onClick={() => deleteItem(item.productId)}
                   >
                     <i className="fas fa-trash-alt small text-muted"></i>
                   </a>
                 </td>
+                {/* REMOVE PRODUCT BUTTON - END */}
               </tr>
             ))}
         </tbody>

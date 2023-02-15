@@ -11,8 +11,8 @@ import SignIn from "./Authentication/SignIn";
 import SignUp from "./Authentication/SignUp";
 import Shop from "./Shop/Shop";
 import Detail from "./Detail/Detail";
-// import Cart from "./Cart/Cart";
-// import Checkout from "./Checkout/Checkout";
+import Cart from "./Cart/Cart";
+import Checkout from "./Checkout/Checkout";
 // import History from "./History/History";
 // import Chat from "./Share/Chat/Chat";
 
@@ -24,10 +24,10 @@ function App() {
         <Routes>
           <Route exact path="/" element={<Home />} />
           <Route exact path="/detail/:id" element={<Detail />} />
-          {/* <Route exact path="/cart" element={<Cart />} /> */}
+          <Route exact path="/cart" element={<Cart />} />
           <Route exact path="/signin" element={<SignIn />} />
           <Route exact path="/signup" element={<SignUp />} />
-          {/* <Route exact path="/checkout" element={<Checkout />} /> */}
+          <Route exact path="/checkout" element={<Checkout />} />
           {/* <Route exact path="/history" element={<History />} /> */}
           <Route exact path="/shop" element={<Shop />} />
         </Routes>

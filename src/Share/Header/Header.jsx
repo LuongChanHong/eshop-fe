@@ -10,6 +10,7 @@ function Header(props) {
   const [active, setActive] = useState("Home");
   const [loginUser, setLoginUser] = useState(false);
   const [nameUser, setNameUser] = useState(false);
+  const [hideCartIcon, setHideCartIcon] = useState(false);
 
   const idUser = useSelector((state) => state.user.userId);
 
@@ -17,9 +18,11 @@ function Header(props) {
     if (!idUser) {
       setLoginUser(false);
       setNameUser(false);
+      setHideCartIcon(false);
     } else {
       setLoginUser(true);
       setNameUser(true);
+      setHideCartIcon(true);
     }
   }, [idUser]);
 
@@ -73,12 +76,16 @@ function Header(props) {
             </li>
           </ul>
           <ul className="navbar-nav ml-auto">
-            <li className="nav-item">
-              <Link className="nav-link" to={`/cart`}>
-                <i className="fas fa-dolly-flatbed mr-1 text-gray"></i>
-                Cart
-              </Link>
-            </li>
+            {hideCartIcon ? (
+              <li className="nav-item">
+                <Link className="nav-link" to={`/cart`}>
+                  <i className="fas fa-dolly-flatbed mr-1 text-gray"></i>
+                  Cart
+                </Link>
+              </li>
+            ) : (
+              <></>
+            )}
             {nameUser ? <Name /> : ""}
             {loginUser ? <LoginLink /> : <LogoutLink />}
           </ul>
