@@ -1,11 +1,13 @@
 import React, { useState } from "react";
-// import { Link, Redirect } from 'react-router-dom';
 import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
-import UserAPI from "../API/UserAPI";
+// import UserAPI from "../API/UserAPI";
 import "./Auth.css";
-import queryString from "query-string";
+// import queryString from "query-string";
 // import MessengerAPI from "../API/MessengerAPI";
+
+import { signUpAction } from "../Redux/Actions/userAction";
 
 SignUp.propTypes = {};
 
@@ -22,6 +24,8 @@ function SignUp(props) {
   const [errorPhone, setPhoneError] = useState(false);
 
   const [success, setSuccess] = useState(false);
+
+  const navigate = useNavigate();
 
   const onChangeName = (e) => {
     setFullName(e.target.value);
@@ -55,16 +59,14 @@ function SignUp(props) {
     }
   };
 
-  const handlerSignUp = (e) => {
-    e.preventDefault();
-
+  const inputValidation = () => {
     if (!fullname) {
       setFullnameError(true);
       setEmailError(false);
       setPhoneError(false);
       setPasswordError(false);
       setEmailRegex(false);
-      return;
+      return false;
     } else {
       setFullnameError(false);
       setPhoneError(false);
@@ -77,7 +79,7 @@ function SignUp(props) {
         setEmailError(true);
         setPhoneError(false);
         setPasswordError(false);
-        return;
+        return false;
       } else {
         setEmailError(false);
         setPhoneError(false);
@@ -90,7 +92,7 @@ function SignUp(props) {
           setEmailError(false);
           setPhoneError(false);
           setPasswordError(false);
-          return;
+          return false;
         } else {
           setEmailRegex(false);
 
@@ -99,7 +101,7 @@ function SignUp(props) {
             setEmailError(false);
             setPhoneError(false);
             setPasswordError(true);
-            return;
+            return false;
           } else {
             setFullnameError(false);
             setPhoneError(false);
@@ -113,48 +115,54 @@ function SignUp(props) {
               setPhoneError(true);
               setPasswordError(false);
             } else {
-              // console.log("Thanh Cong");
-              const fetchSignUp = async () => {
-                const params = {
-                  fullname: fullname,
-                  email: email,
-                  password: password,
-                  phone: phone,
-                };
-
-                const query = "?" + queryString.stringify(params);
-
-                const response = await UserAPI.postSignUp(query);
-                console.log("response:", response);
-                if (response.data.errors) {
-                  handleSetError(response.data.errors);
-                } else {
-                  setSuccess(true);
-                }
-              };
-
-              fetchSignUp();
-
-              // Hàm này dùng để tạo các conversation cho user và admin
-              // const fetchConversation = async () => {
-              //   const params = {
-              //     email: email,
-              //     password: password,
-              //   };
-
-              //   const query = "?" + queryString.stringify(params);
-
-              //   const response = await MessengerAPI.postConversation(query);
-              //   console.log(response);
-              // };
-
-              // fetchConversation();
+              return true;
             }
           }
         }
       }
     }
   };
+
+  const handlerSignUp = () => {
+    const isInputValid = inputValidation();
+    if (isInputValid) {
+      // console.log("Thanh Cong");
+      const fetchSignUp = async () => {
+        const signupData = {
+          fullname: fullname,
+          email: email,
+          password: password,
+          phone: phone,
+        };
+
+        const response = await signUpAction(signupData);
+        console.log("response:", response);
+        if (response.errors) {
+          handleSetError(response.errors);
+        } else {
+          setSuccess(true);
+        }
+      };
+
+      fetchSignUp();
+      navigate("/signin");
+    }
+  };
+
+  // Hàm này dùng để tạo các conversation cho user và admin
+  // const fetchConversation = async () => {
+  //   const params = {
+  //     email: email,
+  //     password: password,
+  //   };
+
+  //   const query = "?" + queryString.stringify(params);
+
+  //   const response = await MessengerAPI.postConversation(query);
+  //   console.log(response);
+  // };
+
+  // fetchConversation();
 
   function validateEmail(email) {
     const re =
@@ -229,7 +237,6 @@ function SignUp(props) {
           </div>
 
           <div className="container-login100-form-btn m-t-20">
-            {/* {success && <Redirect to={'/signin'} />} */}
             <button className="login100-form-btn" onClick={handlerSignUp}>
               Sign Up
             </button>

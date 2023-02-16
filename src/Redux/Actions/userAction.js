@@ -16,6 +16,17 @@ export const signInAction = (data) => {
   };
 };
 
+export const signUpAction = async (data) => {
+  try {
+    const result = await userService.signUp(data);
+    // console.log("result:", result);
+    return result.data;
+  } catch (error) {
+    console.log(error);
+    alert(error.response.data);
+  }
+};
+
 export const signOutAction = (dispatch) => {
   try {
     dispatch(createAction(USER.SIGN_OUT));
