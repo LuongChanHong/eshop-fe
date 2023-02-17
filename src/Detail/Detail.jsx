@@ -185,37 +185,17 @@ function Detail(props) {
       navigate("/signin");
     }
 
-    const selectedItem = {
-      productId: detail._id,
-      productName: detail.name,
-      price: detail.price,
-      quantity: quantity,
-      img: detail.img1,
+    const addData = {
+      selectedItem: {
+        productId: detail._id,
+        price: detail.price,
+        quantity: quantity,
+      },
+      userId: userId,
     };
-    addToCart(dispatch, selectedItem);
-    // let id_user_cart = "";
-    // if (localStorage.getItem("id_user")) {
-    //   id_user_cart = localStorage.getItem("id_user");
-    // } else {
-    //   id_user_cart = id_user;
-    // }
-    // if (localStorage.getItem("id_user")) {
-    //   console.log("Bạn Đã Đăng Nhập!");
-    //   const fetchPost = async () => {
-    //     const params = {
-    //       idUser: id_user_cart, //localStorage.getItem('id_user')
-    //       idProduct: detail._id, // Lấy idProduct
-    //       count: text, // Lấy số lượng
-    //     };
-    //     const query = "?" + queryString.stringify(params);
-    //     const response = await CartAPI.postAddToCart(query);
-    //     console.log(response);
-    //   };
-    //   fetchPost();
-    // } else {
-    //   // const action = addCart(data);
-    //   // dispatch(action);
-    // }
+    addToCart(addData);
+    navigate("/cart");
+
     // alertify.set("notifier", "position", "bottom-left");
     // alertify.success("Bạn Đã Thêm Hàng Thành Công!");
   };

@@ -6,17 +6,17 @@ import convertMoney from "../../convertMoney";
 ListCart.propTypes = {
   cartItems: PropTypes.array,
   deleteCartItem: PropTypes.func,
-  updateQuantity: PropTypes.func,
+  changeQuantity: PropTypes.func,
 };
 
 ListCart.defaultProps = {
   cartItems: [],
   deleteCartItem: null,
-  updateQuantity: null,
+  changeQuantity: null,
 };
 
 function ListCart(props) {
-  const { cartItems, deleteCartItem, updateQuantity } = props;
+  const { cartItems, deleteCartItem, changeQuantity } = props;
 
   const handlerQuantityChange = (e) => {
     console.log(e.target.item);
@@ -30,7 +30,7 @@ function ListCart(props) {
   };
 
   const reduceQuantity = (productId, quantity) => {
-    if (!updateQuantity) {
+    if (!changeQuantity) {
       return;
     }
     if (quantity === 1) {
@@ -38,16 +38,16 @@ function ListCart(props) {
     }
     //Trước khi trả dữ liệu về component cha thì phải thay đổi biến count
     const updatedQuantity = parseInt(quantity) - 1;
-    updateQuantity(productId, updatedQuantity);
+    changeQuantity(productId, updatedQuantity);
   };
 
   const addQuantity = (productId, quantity) => {
-    if (!updateQuantity) {
+    if (!changeQuantity) {
       return;
     }
     //Trước khi trả dữ liệu về component cha thì phải thay đổi biến count
     const updatedQuantity = parseInt(quantity) + 1;
-    updateQuantity(productId, updatedQuantity);
+    changeQuantity(productId, updatedQuantity);
   };
 
   return (

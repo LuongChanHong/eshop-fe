@@ -1,9 +1,28 @@
 import { CART } from "./Types/cartType";
 import { createAction } from ".";
+import { cartService } from "../Services/cartService";
 
-export const addToCart = (dispatch, item) => {
+export const addToCart = async (data) => {
   try {
-    dispatch(createAction(CART.ADD_CART, item));
+    await cartService.addToCart(data);
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+export const getCart = async (userId) => {
+  try {
+    const result = await cartService.getCartByUserId(userId);
+    // console.log("result:", result);
+    return result.data;
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+export const updateQuantity = async (data) => {
+  try {
+    await cartService.updateQuantity(data);
   } catch (error) {
     console.log(error);
   }

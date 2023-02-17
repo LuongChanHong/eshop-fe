@@ -7,48 +7,48 @@ import { Link } from "react-router-dom";
 import convertMoney from "../convertMoney";
 import { useNavigate } from "react-router-dom";
 
-import { changeItemQuantity, deleteItem } from "../Redux/Actions/cartAction";
+import {
+  deleteItem,
+  getCart,
+  updateQuantity,
+} from "../Redux/Actions/cartAction";
 
-function Cart(props) {
-  const cartItems = useSelector((state) => state.cart.cartItems);
-  const [total, setTotal] = useState();
-
+function Cart() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
+  const userId = useSelector((state) => state.user.userId);
+  const [total, setTotal] = useState();
+  const [cartItems, setCartItems] = useState([]);
+  const [isCartUpdate, setCartUpdate] = useState(false);
+
   useEffect(() => {
-    //Hàm này dùng để tính tổng tiền carts
-    function getTotal(cartItems) {
-      let sub_total = 0;
-      cartItems.forEach((item) => {
-        sub_total += item.price * item.quantity;
-      });
+    const getCartByUserId = async () => {
+      const response = await getCart(userId);
+      console.log("response:", response);
+      setCartItems(response.items);
+    };
+    getCartByUserId();
+  }, [isCartUpdate]);
 
-      setTotal(sub_total);
-    }
-    getTotal(cartItems);
-  }, [cartItems]);
+  // Hàm truyền vào mỗi quantity btn thuộc item trong comp ListCart
+  const changeQuantity = (productId, quantity) => {
+    const data = {
+      userId: userId,
+      productId: productId,
+      quantity: quantity,
+    };
+    updateQuantity(data);
+    setCartUpdate(!isCartUpdate);
+    alertify.set("notifier", "position", "bottom-left");
+    alertify.success("Bạn Đã Sửa Hàng Thành Công!");
+  };
 
-  //Hàm này dùng để truyền xuống cho component con xử và trả ngược dữ liệu lại component cha
   const deleteCartItem = (productId) => {
     deleteItem(dispatch, productId);
 
     alertify.set("notifier", "position", "bottom-left");
     alertify.error("Bạn Đã Xóa Hàng Thành Công!");
-  };
-
-  //Hàm này dùng để truyền xuống cho component con xử và trả ngược dữ liệu lại component cha
-  const updateQuantity = (productId, quantity) => {
-    //Nếu không có phiên làm việc của Session User thì mình sẽ xử lý với Redux
-    const data = {
-      productId: productId,
-      quantity: quantity,
-    };
-
-    changeItemQuantity(dispatch, data);
-
-    alertify.set("notifier", "position", "bottom-left");
-    alertify.success("Bạn Đã Sửa Hàng Thành Công!");
   };
 
   const onCheckout = () => {
@@ -91,7 +91,7 @@ function Cart(props) {
             <ListCart
               cartItems={cartItems}
               deleteCartItem={deleteCartItem}
-              updateQuantity={updateQuantity}
+              changeQuantity={changeQuantity}
             />
 
             {/* NAVIGAVE BUTTONS - START */}
