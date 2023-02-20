@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
 // import CheckoutAPI from "../API/CheckoutAPI";
 import convertMoney from "../convertMoney";
 import "./Checkout.css";
@@ -32,7 +33,7 @@ function Checkout(props) {
   const [load, setLoad] = useState(false);
 
   const userId = useSelector((state) => state.user.userId);
-  // console.log(userId);
+  const navigate = useNavigate();
 
   const getTotal = (itemList) => {
     let sub_total = 0;
@@ -62,7 +63,7 @@ function Checkout(props) {
       setAddress(response.address || "");
     };
     getUserInfo();
-  }, [cartItems]);
+  }, []);
 
   const inputValidation = () => {
     if (!fullname) {
@@ -135,6 +136,8 @@ function Checkout(props) {
         products: cartItems,
         totalPrice: total,
       });
+
+      navigate("/");
     }
   };
 
