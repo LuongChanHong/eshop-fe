@@ -1,25 +1,25 @@
 import React, { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
-import HistoryAPI from "../../API/HistoryAPI";
+import { useSelector } from "react-redux";
+import { Link, useNavigate } from "react-router-dom";
+import HistoryAPI from "../API/HistoryAPI";
 import queryString from "query-string";
 
+import { getAllOrder } from "../Redux/Actions/orderAction";
 MainHistory.propTypes = {};
 
-function MainHistory(props) {
-  const [listCart, setListCart] = useState([]);
+function MainHistory() {
+  const [orderList, setOrderList] = useState([]);
+  const userId = useSelector((state) => state.user.userId);
+  const navigate = useNavigate();
+  if (userId === "") {
+    navigate("/");
+  }
 
   useEffect(() => {
     const fetchData = async () => {
-      const params = {
-        idUser: localStorage.getItem("id_user"),
-      };
-
-      const query = "?" + queryString.stringify(params);
-
-      const response = await HistoryAPI.getHistoryAPI(query);
-      console.log(response);
-
-      setListCart(response);
+      const response = await getAllOrder(userId);
+      console.log("respone:", response);
+      setOrderList(response);
     };
 
     fetchData();
@@ -54,10 +54,6 @@ function MainHistory(props) {
               </th>
               <th className="border-0" scope="col">
                 {" "}
-                <strong className="text-small text-uppercase">ID User</strong>
-              </th>
-              <th className="border-0" scope="col">
-                {" "}
                 <strong className="text-small text-uppercase">Name</strong>
               </th>
               <th className="border-0" scope="col">
@@ -87,43 +83,38 @@ function MainHistory(props) {
             </tr>
           </thead>
           <tbody>
-            {listCart &&
-              listCart.map((value) => (
-                <tr className="text-center" key={value._id}>
+            {orderList &&
+              orderList.map((order) => (
+                <tr className="text-center" key={order._id}>
                   <td className="align-middle border-0">
-                    <p className="mb-0 small">{value._id}</p>
+                    <p className="mb-0 small">{order._id}</p>
                   </td>
                   <td className="align-middle border-0">
-                    <p className="mb-0 small">{value.idUser}</p>
+                    <p className="mb-0 small">{order.user.fullname}</p>
                   </td>
                   <td className="align-middle border-0">
-                    <p className="mb-0 small">{value.fullname}</p>
+                    <p className="mb-0 small">{order.user.phone}</p>
                   </td>
                   <td className="align-middle border-0">
-                    <p className="mb-0 small">{value.phone}</p>
+                    <p className="mb-0 small">{order.user.address}</p>
                   </td>
                   <td className="align-middle border-0">
-                    <p className="mb-0 small">{value.address}</p>
-                  </td>
-                  <td className="align-middle border-0">
-                    <p className="mb-0 small">${value.total}</p>
+                    <p className="mb-0 small">${order.totalPrice}</p>
                   </td>
                   <td className="align-middle border-0">
                     <p className="mb-0 small">
-                      {!value.delivery
-                        ? "Waiting for progressing"
-                        : "Processed"}
+                      {order.delivery ? "Waiting for progressing" : "Processed"}
                     </p>
                   </td>
                   <td className="align-middle border-0">
                     <p className="mb-0 small">
-                      {!value.status ? "Waiting for pay" : "Paid"}
+                      {order.status ? "Waiting for pay" : order.status}
                     </p>
                   </td>
                   <td className="align-middle border-0">
                     <Link
                       className="btn btn-outline-dark btn-sm"
-                      to={`/history/${value._id}`}
+                      to={`/history/${order._id}`}
                     >
                       View
                       <i className="fas fa-long-arrow-alt-right ml-2"></i>

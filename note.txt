@@ -1,3 +1,3 @@
 Update app:
-- hoàn thành nâng cấp chức năng đặt hàng (component Checkout)
-"update order feature done (component Checkout)"
+- hiện thông tin các đơn hàng người dùng đã đặt (component MainHistory)
+"render user orders info (component MainHistory)"

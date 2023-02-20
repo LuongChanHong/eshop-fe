@@ -128,16 +128,18 @@ function Checkout(props) {
 
       // setLoad(!load);
       createOrder({
-        userId: userId,
-        fullname: fullname,
-        email: email,
-        phone: phone,
-        address: address,
+        user: {
+          userId: userId,
+          fullname: fullname,
+          email: email,
+          phone: phone,
+          address: address,
+        },
         products: cartItems,
         totalPrice: total,
       });
 
-      navigate("/");
+      // navigate("/");
     }
   };
 
