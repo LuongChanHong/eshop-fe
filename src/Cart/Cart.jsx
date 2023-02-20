@@ -14,21 +14,20 @@ import {
 } from "../Redux/Actions/cartAction";
 
 function Cart() {
-  const dispatch = useDispatch();
   const navigate = useNavigate();
 
   const userId = useSelector((state) => state.user.userId);
   const [total, setTotal] = useState();
   const [cartItems, setCartItems] = useState([]);
 
-  function getTotal(itemList) {
+  const getTotal = (itemList) => {
     let sub_total = 0;
     itemList.forEach((item) => {
       sub_total += item.price * item.quantity;
     });
 
     setTotal(sub_total);
-  }
+  };
   const getCartByUserId = async () => {
     const response = await getCart(userId);
     console.log("response.items:", response.items);

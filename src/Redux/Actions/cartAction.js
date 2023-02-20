@@ -36,17 +36,9 @@ export const deleteItem = async (userId, productId) => {
   }
 };
 
-export const changeItemQuantity = (dispatch, item) => {
-  try {
-    dispatch(createAction(CART.CHANGE_ITEM_QUANTITY, item));
-  } catch (error) {
-    console.log(error);
-  }
-};
-
 export const resetCart = (dispatch) => {
   try {
-    dispatch(createAction(CART.RESET_CART));
+    // dispatch(createAction(CART.RESET_CART));
   } catch (error) {
     console.log(error);
   }

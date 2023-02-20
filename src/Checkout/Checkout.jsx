@@ -1,19 +1,18 @@
 import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
-import queryString from "query-string";
-import CartAPI from "../API/CartAPI";
-import CheckoutAPI from "../API/CheckoutAPI";
+// import CheckoutAPI from "../API/CheckoutAPI";
 import convertMoney from "../convertMoney";
 import "./Checkout.css";
 
 import { createOrder } from "../Redux/Actions/orderAction";
 import { getInfo } from "../Redux/Actions/userAction";
+import { getCart } from "../Redux/Actions/cartAction";
 
 // import io from "socket.io-client";
 // const socket = io("http://localhost:5000");
 
 function Checkout(props) {
-  const [carts, setCarts] = useState([]);
+  const [cartItems, setCartItems] = useState([]);
   const [total, setTotal] = useState(0);
 
   const [fullname, setFullname] = useState("");
@@ -32,22 +31,27 @@ function Checkout(props) {
   const [success, setSuccess] = useState(false);
   const [load, setLoad] = useState(false);
 
-  const cartItems = useSelector((state) => state.cart.cartItems);
   const userId = useSelector((state) => state.user.userId);
   // console.log(userId);
 
+  const getTotal = (itemList) => {
+    let sub_total = 0;
+    itemList.forEach((item) => {
+      sub_total += item.price * item.quantity;
+    });
+
+    setTotal(sub_total);
+  };
+  const getCartByUserId = async () => {
+    const response = await getCart(userId);
+    console.log("response.items:", response.items);
+    getTotal(response.items);
+    setCartItems(response.items);
+  };
+
   //Hàm này dùng để gọi API và render số sản phẩm
   useEffect(() => {
-    //Hàm này dùng để tính tổng tiền carts
-    function getTotal(cartItems) {
-      let sub_total = 0;
-      cartItems.forEach((item) => {
-        sub_total += item.price * item.quantity;
-      });
-
-      setTotal(sub_total);
-    }
-    getTotal(cartItems);
+    getCartByUserId();
 
     const getUserInfo = async () => {
       const response = await getInfo(userId);
@@ -364,7 +368,7 @@ function Checkout(props) {
                               </strong>
                               <br></br>
                               <span className="text-muted small">
-                                {convertMoney(item.price)} VND x {item.quantity}
+                                {convertMoney(item.price)} x {item.quantity}
                               </span>
                             </li>
                             <li className="border-bottom my-2"></li>
