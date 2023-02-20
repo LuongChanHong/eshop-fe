@@ -6,14 +6,31 @@ export class CartService extends baseService {
   constructor() {
     super();
   }
-  addToCart = (data) => {
-    return this.post("/cart/add-item", data);
+  addToCart = async (data) => {
+    try {
+      await this.post("/cart/add-item", data);
+    } catch (error) {
+      console.log(error);
+    }
   };
   getCartByUserId = (userId) => {
     return this.get(`/cart/get-by-user-id?id=${userId}`);
   };
-  updateQuantity = (data) => {
-    return this.post("/cart/update-quantity", data);
+  updateQuantity = async (data) => {
+    try {
+      await this.post("/cart/update-quantity", data);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+  deleteItem = async (userId, productId) => {
+    try {
+      await this.delete(
+        `/cart/delete-item?userId=${userId}&productId=${productId}`
+      );
+    } catch (error) {
+      console.log(error);
+    }
   };
 }
 

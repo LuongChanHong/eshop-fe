@@ -1,3 +1,3 @@
 Update app:
-- lỗi logic, cần reload lại mỗi lần tăng/ giảm item trong cart
-"logic bug: reload needed when update cart item quantity"
+- chuyển logic chỉnh sửa số lượng, xóa sản phẩm giỏ hàng lên server
+"move the edit quantity, delete cart products logic to server"

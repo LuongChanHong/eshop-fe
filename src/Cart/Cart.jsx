@@ -20,32 +20,39 @@ function Cart() {
   const userId = useSelector((state) => state.user.userId);
   const [total, setTotal] = useState();
   const [cartItems, setCartItems] = useState([]);
-  const [isCartUpdate, setCartUpdate] = useState(false);
 
   useEffect(() => {
     const getCartByUserId = async () => {
       const response = await getCart(userId);
-      console.log("response:", response);
+      console.log("response.items:", response.items);
       setCartItems(response.items);
     };
     getCartByUserId();
-  }, [isCartUpdate]);
+  }, []);
 
   // Hàm truyền vào mỗi quantity btn thuộc item trong comp ListCart
-  const changeQuantity = (productId, quantity) => {
+  const changeQuantity = async (productId, quantity) => {
     const data = {
       userId: userId,
       productId: productId,
       quantity: quantity,
     };
-    updateQuantity(data);
-    setCartUpdate(!isCartUpdate);
+    await updateQuantity(data);
+
+    // cập nhập lại cart sau khi thêm/ bớt product quantity
+    const updatedCart = await getCart(userId);
+    setCartItems(updatedCart.items);
+
     alertify.set("notifier", "position", "bottom-left");
     alertify.success("Bạn Đã Sửa Hàng Thành Công!");
   };
 
-  const deleteCartItem = (productId) => {
-    deleteItem(dispatch, productId);
+  const deleteCartItem = async (productId) => {
+    await deleteItem(userId, productId);
+
+    // cập nhập lại cart sau khi xóa 1 product
+    const updatedCart = await getCart(userId);
+    setCartItems(updatedCart.items);
 
     alertify.set("notifier", "position", "bottom-left");
     alertify.error("Bạn Đã Xóa Hàng Thành Công!");

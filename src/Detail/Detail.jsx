@@ -180,7 +180,7 @@ function Detail(props) {
   };
 
   //Hàm này là Thêm Sản Phẩm
-  const handleAddToCart = () => {
+  const handleAddToCart = async () => {
     if (userId === "") {
       navigate("/signin");
     }
@@ -193,7 +193,7 @@ function Detail(props) {
       },
       userId: userId,
     };
-    addToCart(addData);
+    await addToCart(addData);
     navigate("/cart");
 
     // alertify.set("notifier", "position", "bottom-left");

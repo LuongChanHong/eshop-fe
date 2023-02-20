@@ -28,9 +28,9 @@ export const updateQuantity = async (data) => {
   }
 };
 
-export const deleteItem = (dispatch, productId) => {
+export const deleteItem = async (userId, productId) => {
   try {
-    dispatch(createAction(CART.DELETE_CART_ITEM, productId));
+    await cartService.deleteItem(userId, productId);
   } catch (error) {
     console.log(error);
   }

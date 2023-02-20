@@ -45,7 +45,6 @@ function ListCart(props) {
     if (!changeQuantity) {
       return;
     }
-    //Trước khi trả dữ liệu về component cha thì phải thay đổi biến count
     const updatedQuantity = parseInt(quantity) + 1;
     changeQuantity(productId, updatedQuantity);
   };

@@ -21,4 +21,14 @@ export class baseService {
       },
     });
   };
+
+  delete = (url) => {
+    return Axios({
+      url: `${serverPath}${url}`,
+      method: "DELETE",
+      headers: {
+        "content-type": "application/json",
+      },
+    });
+  };
 }
