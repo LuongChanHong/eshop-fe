@@ -21,12 +21,22 @@ function Cart() {
   const [total, setTotal] = useState();
   const [cartItems, setCartItems] = useState([]);
 
+  function getTotal(itemList) {
+    let sub_total = 0;
+    itemList.forEach((item) => {
+      sub_total += item.price * item.quantity;
+    });
+
+    setTotal(sub_total);
+  }
+  const getCartByUserId = async () => {
+    const response = await getCart(userId);
+    console.log("response.items:", response.items);
+    getTotal(response.items);
+    setCartItems(response.items);
+  };
+
   useEffect(() => {
-    const getCartByUserId = async () => {
-      const response = await getCart(userId);
-      console.log("response.items:", response.items);
-      setCartItems(response.items);
-    };
     getCartByUserId();
   }, []);
 
@@ -40,8 +50,7 @@ function Cart() {
     await updateQuantity(data);
 
     // cập nhập lại cart sau khi thêm/ bớt product quantity
-    const updatedCart = await getCart(userId);
-    setCartItems(updatedCart.items);
+    await getCartByUserId();
 
     alertify.set("notifier", "position", "bottom-left");
     alertify.success("Bạn Đã Sửa Hàng Thành Công!");
@@ -51,8 +60,7 @@ function Cart() {
     await deleteItem(userId, productId);
 
     // cập nhập lại cart sau khi xóa 1 product
-    const updatedCart = await getCart(userId);
-    setCartItems(updatedCart.items);
+    await getCartByUserId();
 
     alertify.set("notifier", "position", "bottom-left");
     alertify.error("Bạn Đã Xóa Hàng Thành Công!");
@@ -132,14 +140,14 @@ function Cart() {
               <div className="card-body">
                 <h5 className="text-uppercase mb-4">Cart total</h5>
                 <ul className="list-unstyled mb-0">
-                  <li className="d-flex align-items-center justify-content-between">
+                  {/* <li className="d-flex align-items-center justify-content-between">
                     <strong className="text-uppercase small font-weight-bold">
                       Subtotal
                     </strong>
                     <span className="text-muted small">
                       {convertMoney(total)} VND
                     </span>
-                  </li>
+                  </li> */}
                   <li className="border-bottom my-2"></li>
                   <li className="d-flex align-items-center justify-content-between mb-4">
                     <strong className="text-uppercase small font-weight-bold">
