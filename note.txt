@@ -1,3 +1,3 @@
 Update app:
-- hiện thông tin các đơn hàng người dùng đã đặt (component MainHistory)
-"render user orders info (component MainHistory)"
+- đã tìm ra cách gửi mail bằng nodemailer, mailgen đến gmail
+"founded how to send mail to gmail by nodemailer, mailgen"
