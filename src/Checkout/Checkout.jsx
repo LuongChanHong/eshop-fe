@@ -139,44 +139,9 @@ function Checkout(props) {
         totalPrice: total,
       });
 
-      // navigate("/");
+      navigate("/history");
     }
   };
-
-  //Hàm này bắt đầu gửi Email xác nhận đơn hàng
-  // useEffect(() => {
-  //   if (load) {
-  //     const sendMail = async () => {
-  //       const params = {
-  //         to: email,
-  //         fullname: fullname,
-  //         phone: phone,
-  //         address: address,
-  //         idUser: localStorage.getItem("id_user"),
-  //       };
-
-  //       const query = "?" + queryString.stringify(params);
-
-  //       const response = await CheckoutAPI.postEmail(query);
-
-  //       console.log(response);
-  //     };
-
-  //     sendMail();
-
-  //     // const data = localStorage.getItem("id_user");
-
-  //     // Gửi socket lên server
-  //     // socket.emit("send_order", data);
-
-  //     //Dùng setTimeout delay 3s
-  //     //Sau 4s nó sẽ thực hiện
-  //     setTimeout(() => {
-  //       setSuccess(!success);
-  //       setLoad(!load);
-  //     }, 4000);
-  //   }
-  // }, [load]);
 
   const onChangeName = (e) => {
     setFullname(e.target.value);
@@ -394,14 +359,14 @@ function Checkout(props) {
           </section>
         )}
 
-        {success && (
+        {/* {success && (
           <section className="py-5">
             <div className="p-5">
               <h1>You Have Successfully Ordered!</h1>
               <p style={{ fontSize: "1.2rem" }}>Please Check Your Email.</p>
             </div>
           </section>
-        )}
+        )} */}
       </div>
     </div>
   );
