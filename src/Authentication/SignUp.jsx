@@ -231,7 +231,7 @@ function SignUp(props) {
               className="input100"
               value={phone}
               onChange={onChangePhone}
-              type="text"
+              type="tel"
               placeholder="Phone"
             />
           </div>
