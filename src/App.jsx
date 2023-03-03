@@ -19,6 +19,7 @@ import DetailHistory from "./History/DetailHistory";
 // import Chat from "./Share/Chat/Chat";
 
 function App() {
+  process.env.CI = "";
   return (
     <div className="App">
       <BrowserRouter>
