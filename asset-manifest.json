@@ -1,0 +1,28 @@
+{
+  "files": {
+    "main.css": "/eshop-fe/static/css/main.aac4becc.chunk.css",
+    "main.js": "/eshop-fe/static/js/main.f52e5dd3.chunk.js",
+    "main.js.map": "/eshop-fe/static/js/main.f52e5dd3.chunk.js.map",
+    "runtime-main.js": "/eshop-fe/static/js/runtime-main.274d0fd0.js",
+    "runtime-main.js.map": "/eshop-fe/static/js/runtime-main.274d0fd0.js.map",
+    "static/js/2.a4c9d6eb.chunk.js": "/eshop-fe/static/js/2.a4c9d6eb.chunk.js",
+    "static/js/2.a4c9d6eb.chunk.js.map": "/eshop-fe/static/js/2.a4c9d6eb.chunk.js.map",
+    "static/js/3.ba4a90dc.chunk.js": "/eshop-fe/static/js/3.ba4a90dc.chunk.js",
+    "static/js/3.ba4a90dc.chunk.js.map": "/eshop-fe/static/js/3.ba4a90dc.chunk.js.map",
+    "index.html": "/eshop-fe/index.html",
+    "static/css/main.aac4becc.chunk.css.map": "/eshop-fe/static/css/main.aac4becc.chunk.css.map",
+    "static/js/2.a4c9d6eb.chunk.js.LICENSE.txt": "/eshop-fe/static/js/2.a4c9d6eb.chunk.js.LICENSE.txt",
+    "static/media/Auth.css": "/eshop-fe/static/media/banner1.4a22881c.jpg",
+    "static/media/product_1.b24c110a.png": "/eshop-fe/static/media/product_1.b24c110a.png",
+    "static/media/product_2.1bc52f89.png": "/eshop-fe/static/media/product_2.1bc52f89.png",
+    "static/media/product_3.48eda529.png": "/eshop-fe/static/media/product_3.48eda529.png",
+    "static/media/product_4.6d83c600.png": "/eshop-fe/static/media/product_4.6d83c600.png",
+    "static/media/product_5.b963def7.png": "/eshop-fe/static/media/product_5.b963def7.png"
+  },
+  "entrypoints": [
+    "static/js/runtime-main.274d0fd0.js",
+    "static/js/2.a4c9d6eb.chunk.js",
+    "static/css/main.aac4becc.chunk.css",
+    "static/js/main.f52e5dd3.chunk.js"
+  ]
+}
