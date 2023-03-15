@@ -71,13 +71,11 @@ function SignIn() {
 
       response.then((data) => {
         console.log("data:", data);
-        jsCookie.set("cookieToken", data.token);
-        jsCookie.set("cookieUserId", data.userId);
-        jsCookie.set("cookieRole", data.role);
-        localStorage.setItem("id_user", data.userId);
-        navigate("/");
         // Trường hợp đăng nhập thành công, server trả về
         if (data.userId) {
+          jsCookie.set("cookieToken", data.token);
+          jsCookie.set("cookieUserId", data.userId);
+          jsCookie.set("cookieRole", data.role);
           localStorage.setItem("id_user", data.userId);
           navigate("/");
         } else {
@@ -120,9 +118,7 @@ function SignIn() {
     <div className="limiter">
       <div className="container-login100">
         <div className="wrap-login100 p-l-55 p-r-55 p-t-65 p-b-50">
-          <span className="login100-form-title p-b-33">
-            Sign In con@mail.com con12345
-          </span>
+          <span className="login100-form-title p-b-33">Sign In</span>
           {errorRender()}
           <div className="wrap-input100 validate-input">
             <input

@@ -96,7 +96,7 @@ function SignUp(props) {
         } else {
           setEmailRegex(false);
 
-          if (!password) {
+          if (!password || password.length < 8) {
             setFullnameError(false);
             setEmailError(false);
             setPhoneError(false);
