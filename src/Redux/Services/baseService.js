@@ -15,6 +15,7 @@ export class baseService {
 
   post = (url, model) => {
     return Axios({
+      withCredentials: true,
       url: `${serverPath}${url}`,
       method: "POST",
       data: model,
@@ -26,6 +27,7 @@ export class baseService {
 
   delete = (url) => {
     return Axios({
+      withCredentials: true,
       url: `${serverPath}${url}`,
       method: "DELETE",
       headers: {

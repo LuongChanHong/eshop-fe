@@ -50,7 +50,6 @@ function Checkout(props) {
     setCartItems(response.items);
   };
 
-  //Hàm này dùng để gọi API và render số sản phẩm
   useEffect(() => {
     getCartByUserId();
 
