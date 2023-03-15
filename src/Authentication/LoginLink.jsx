@@ -5,13 +5,13 @@ import { useNavigate } from "react-router-dom";
 
 import { signOutAction } from "../Redux/Actions/userAction";
 
-function LoginLink(props) {
+function LoginLink() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
   const onRedirect = () => {
     localStorage.clear();
-    signOutAction(dispatch);
+    dispatch(signOutAction());
     navigate("/signin");
   };
 

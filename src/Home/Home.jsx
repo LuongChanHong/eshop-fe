@@ -1,22 +1,30 @@
 import React, { useEffect, useState } from "react";
-// import ProductAPI from "../API/ProductAPI";
+import convertMoney from "../convertMoney";
+import jsCookie from "js-cookie";
+import { Link } from "react-router-dom";
+import { useDispatch } from "react-redux";
+
 import { getAllProduct } from "../Redux/Actions/productAction";
 import Image from "../Share/img/Image";
-import convertMoney from "../convertMoney";
-import { Link } from "react-router-dom";
+import { signOutAction } from "../Redux/Actions/userAction";
 
 function Home(props) {
   const [products, setProducts] = useState([]);
 
+  const dispatch = useDispatch();
+
   //Fetch Product
   useEffect(() => {
+    const cookie = jsCookie.get("cookieToken");
+    if (!cookie) {
+      dispatch(signOutAction());
+    }
     const fetchData = async () => {
       const response = await getAllProduct();
       // console.log(response.data);
       const data = response.splice(0, 8);
       setProducts(data);
     };
-
     fetchData();
   }, []);
 

@@ -1,19 +1,12 @@
 import React, { useEffect, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
-import { compare } from "bcryptjs";
-
 import { signInAction } from "../Redux/Actions/userAction";
+import jsCookie from "js-cookie";
 
-// import { addSession } from "../Redux/Action/ActionSession";
 import "./Auth.css";
-import queryString from "query-string";
-import CartAPI from "../API/CartAPI";
 
-function SignIn(props) {
-  //listCart được lấy từ redux
-  // const listCart = useSelector((state) => state.Cart.listCart);
-
+function SignIn() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [user, setUser] = useState([]);
@@ -21,9 +14,6 @@ function SignIn(props) {
   const [errorEmail, setErrorEmail] = useState(false);
   const [emailRegex, setEmailRegex] = useState(false);
   const [errorPassword, setErrorPassword] = useState(false);
-
-  const [redirect, setRedirect] = useState(false);
-  const [checkPush, setCheckPush] = useState(false);
 
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -81,6 +71,11 @@ function SignIn(props) {
 
       response.then((data) => {
         console.log("data:", data);
+        jsCookie.set("cookieToken", data.token);
+        jsCookie.set("cookieUserId", data.userId);
+        jsCookie.set("cookieRole", data.role);
+        localStorage.setItem("id_user", data.userId);
+        navigate("/");
         // Trường hợp đăng nhập thành công, server trả về
         if (data.userId) {
           localStorage.setItem("id_user", data.userId);
@@ -98,33 +93,6 @@ function SignIn(props) {
       });
     }
   };
-
-  //Hàm này dùng để đưa hết tất cả carts vào API của user
-  // useEffect(() => {
-  //   console.log("checkPush:", checkPush);
-  //   const fetchData = async () => {
-  //     //Lần đầu sẽ không thực hiện insert được vì addCart = ''
-  //     if (checkPush === true) {
-  //       for (let i = 0; i < listCart.length; i++) {
-  //         //Nó sẽ lấy idUser và idProduct và count cần thêm để gửi lên server
-  //         const params = {
-  //           idUser: localStorage.getItem("id_user"),
-  //           idProduct: listCart[i].idProduct,
-  //           count: listCart[i].count,
-  //         };
-
-  //         const query = "?" + queryString.stringify(params);
-
-  //         const response = await CartAPI.postAddToCart(query);
-  //         console.log(response);
-  //       }
-
-  //       setRedirect(true);
-  //     }
-  //   };
-
-  //   fetchData();
-  // }, [checkPush]);
 
   function validateEmail(email) {
     const re =
@@ -152,7 +120,9 @@ function SignIn(props) {
     <div className="limiter">
       <div className="container-login100">
         <div className="wrap-login100 p-l-55 p-r-55 p-t-65 p-b-50">
-          <span className="login100-form-title p-b-33">Sign In</span>
+          <span className="login100-form-title p-b-33">
+            Sign In con@mail.com con12345
+          </span>
           {errorRender()}
           <div className="wrap-input100 validate-input">
             <input

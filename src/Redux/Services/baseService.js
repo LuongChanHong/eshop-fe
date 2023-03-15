@@ -3,10 +3,12 @@ import { serverPath } from "../path";
 export class baseService {
   get = (url) => {
     return Axios({
+      withCredentials: true,
       url: `${serverPath}${url}`,
       method: "GET",
       headers: {
         "content-type": "application/json",
+        "access-control-allow-origin": "include",
       },
     });
   };

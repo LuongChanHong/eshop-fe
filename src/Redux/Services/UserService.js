@@ -12,7 +12,9 @@ export class UserService extends baseService {
   signUp = (data) => {
     return this.post("/user/signup", data);
   };
-
+  signOut = () => {
+    return this.post("/user/logout", {});
+  };
   getInfo = (id) => {
     return this.get(`/user/info?id=${id}`);
   };
