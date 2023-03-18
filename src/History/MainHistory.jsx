@@ -1,9 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
-import HistoryAPI from "../API/HistoryAPI";
-import queryString from "query-string";
 
+import jsCookie from "js-cookie";
 import { getAllOrder } from "../Redux/Actions/orderAction";
 MainHistory.propTypes = {};
 
@@ -11,8 +10,10 @@ function MainHistory() {
   const [orderList, setOrderList] = useState([]);
   const userId = useSelector((state) => state.user.userId);
   const navigate = useNavigate();
-  if (userId === "") {
-    navigate("/");
+
+  const cookie = jsCookie.get("cookieToken");
+  if (cookie == undefined) {
+    navigate("/signin");
   }
 
   useEffect(() => {

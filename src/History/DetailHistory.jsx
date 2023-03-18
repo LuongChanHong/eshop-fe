@@ -1,17 +1,19 @@
 import React, { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import convertMoney from "../convertMoney";
-
-import HistoryAPI from "../API/HistoryAPI";
+import { useNavigate } from "react-router-dom";
 
 import { getOrderById } from "../Redux/Actions/orderAction";
+import jsCookie from "js-cookie";
 
 function DetailHistory() {
-  const { id } = useParams();
-
   const [cart, setCart] = useState([]);
   const [totalPrice, setTotalPrice] = useState();
   const [userInfo, setUserInfo] = useState({});
+
+  const { id } = useParams();
+  const navigate = useNavigate();
+  const cookie = jsCookie.get("cookieToken");
 
   useEffect(() => {
     const fetchData = async () => {
@@ -23,7 +25,11 @@ function DetailHistory() {
       setUserInfo(response.user);
     };
 
-    fetchData();
+    if (cookie == undefined) {
+      navigate("/signin");
+    } else {
+      fetchData();
+    }
   }, []);
 
   return (

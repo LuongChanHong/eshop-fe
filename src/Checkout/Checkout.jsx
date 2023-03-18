@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
-// import CheckoutAPI from "../API/CheckoutAPI";
+import jsCookie from "js-cookie";
 import convertMoney from "../convertMoney";
 import "./Checkout.css";
 
@@ -34,6 +34,7 @@ function Checkout(props) {
 
   const userId = useSelector((state) => state.user.userId);
   const navigate = useNavigate();
+  const cookie = jsCookie.get("cookieToken");
 
   const getTotal = (itemList) => {
     let sub_total = 0;
@@ -52,7 +53,6 @@ function Checkout(props) {
 
   useEffect(() => {
     getCartByUserId();
-
     const getUserInfo = async () => {
       const response = await getInfo(userId);
       // console.log("response", response);
@@ -61,7 +61,11 @@ function Checkout(props) {
       setPhone(response.phone);
       setAddress(response.address || "");
     };
-    getUserInfo();
+    if (cookie == undefined) {
+      navigate("/signin");
+    } else {
+      getUserInfo();
+    }
   }, []);
 
   const inputValidation = () => {

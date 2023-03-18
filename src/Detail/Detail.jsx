@@ -1,14 +1,9 @@
 import React, { useEffect, useState } from "react";
-// import ProductAPI from "../API/ProductAPI";
-
 import { Link, useParams, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-// import alertify from "alertifyjs";
-// import { addCart } from "../Redux/Action/ActionCart";
-// import CartAPI from "../API/CartAPI";
-// import queryString from "query-string";
-// import CommentAPI from "../API/CommentAPI";
 import convertMoney from "../convertMoney";
+
+import jsCookie from "js-cookie";
 
 import {
   getProductDetail,
@@ -17,24 +12,16 @@ import {
 
 import { addToCart } from "../Redux/Actions/cartAction";
 
-function Detail(props) {
+function Detail() {
   const [detail, setDetail] = useState({});
+  const [product, setProduct] = useState([]);
 
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  //id params cho từng sản phẩm
   const { id } = useParams();
-
   const userId = useSelector((state) => state.user.userId);
-
-  //id_user được lấy từ redux
-  // const id_user = useSelector((state) => state.Cart.id_user);
-
-  //listCart được lấy từ redux
-  // const listCart = useSelector((state) => state.Cart.listCart);
-
-  const [product, setProduct] = useState([]);
+  const cookie = jsCookie.get("cookieToken");
 
   // const [star, setStar] = useState(1);
 
@@ -181,20 +168,20 @@ function Detail(props) {
 
   //Hàm này là Thêm Sản Phẩm
   const handleAddToCart = async () => {
-    if (userId === "") {
+    if (cookie == undefined) {
       navigate("/signin");
+    } else {
+      const addData = {
+        selectedItem: {
+          productId: detail._id,
+          price: detail.price,
+          quantity: quantity,
+        },
+        userId: userId,
+      };
+      await addToCart(addData);
+      navigate("/cart");
     }
-
-    const addData = {
-      selectedItem: {
-        productId: detail._id,
-        price: detail.price,
-        quantity: quantity,
-      },
-      userId: userId,
-    };
-    await addToCart(addData);
-    navigate("/cart");
 
     // alertify.set("notifier", "position", "bottom-left");
     // alertify.success("Bạn Đã Thêm Hàng Thành Công!");

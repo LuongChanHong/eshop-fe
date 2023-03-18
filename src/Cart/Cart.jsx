@@ -6,6 +6,7 @@ import { Link } from "react-router-dom";
 // import queryString from "query-string";
 import convertMoney from "../convertMoney";
 import { useNavigate } from "react-router-dom";
+import jsCookie from "js-cookie";
 
 import {
   deleteItem,
@@ -19,6 +20,7 @@ function Cart() {
   const userId = useSelector((state) => state.user.userId);
   const [total, setTotal] = useState();
   const [cartItems, setCartItems] = useState([]);
+  const cookie = jsCookie.get("cookieToken");
 
   const getTotal = (itemList) => {
     let sub_total = 0;
@@ -36,7 +38,11 @@ function Cart() {
   };
 
   useEffect(() => {
-    getCartByUserId();
+    if (cookie == undefined) {
+      navigate("/signin");
+    } else {
+      getCartByUserId();
+    }
   }, []);
 
   // Hàm truyền vào mỗi quantity btn thuộc item trong comp ListCart

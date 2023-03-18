@@ -16,8 +16,6 @@ import Checkout from "./Checkout/Checkout";
 import MainHistory from "./History/MainHistory";
 import DetailHistory from "./History/DetailHistory";
 
-// import Chat from "./Share/Chat/Chat";
-
 function App() {
   return (
     <div className="App">
