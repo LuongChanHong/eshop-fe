@@ -1,3 +1,3 @@
 Update app:
-- testing deploy
-"testing deploy"
+- gửi thông báo lỗi về tag network browser
+"send error message to network browser tab"

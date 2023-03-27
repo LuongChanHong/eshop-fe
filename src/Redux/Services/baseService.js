@@ -3,6 +3,7 @@ import { serverPath } from "../path";
 export class baseService {
   get = (url) => {
     return Axios({
+      baseURL: "/",
       withCredentials: true,
       url: `${serverPath}${url}`,
       method: "GET",
@@ -15,6 +16,7 @@ export class baseService {
 
   post = (url, model) => {
     return Axios({
+      baseURL: "/",
       withCredentials: true,
       url: `${serverPath}${url}`,
       method: "POST",
@@ -27,6 +29,7 @@ export class baseService {
 
   delete = (url) => {
     return Axios({
+      baseURL: "/",
       withCredentials: true,
       url: `${serverPath}${url}`,
       method: "DELETE",
