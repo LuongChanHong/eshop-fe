@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 import ListCart from "./Component/ListCart";
 import alertify from "alertifyjs";
 import { Link } from "react-router-dom";
@@ -37,6 +37,7 @@ function Cart() {
     setCartItems(response.items);
   };
 
+  // Nếu đã có cookie đăng nhập từ server thì được phép lấy thông tin cart của user
   useEffect(() => {
     if (cookie == undefined) {
       navigate("/signin");

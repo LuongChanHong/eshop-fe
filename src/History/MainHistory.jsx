@@ -12,10 +12,8 @@ function MainHistory() {
   const navigate = useNavigate();
 
   const cookie = jsCookie.get("cookieToken");
-  if (cookie == undefined) {
-    navigate("/signin");
-  }
 
+  // Nếu đã có cookie đăng nhập từ server thì được phép lấy danh sách các order
   useEffect(() => {
     const fetchData = async () => {
       const response = await getAllOrder(userId);
@@ -23,7 +21,11 @@ function MainHistory() {
       setOrderList(response);
     };
 
-    fetchData();
+    if (cookie == undefined) {
+      navigate("/signin");
+    } else {
+      fetchData();
+    }
   }, []);
 
   return (

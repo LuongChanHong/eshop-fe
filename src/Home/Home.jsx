@@ -8,17 +8,17 @@ import { getAllProduct } from "../Redux/Actions/productAction";
 import Image from "../Share/img/Image";
 import { signOutAction } from "../Redux/Actions/userAction";
 
-function Home(props) {
+function Home() {
   const [products, setProducts] = useState([]);
 
   const dispatch = useDispatch();
 
   //Fetch Product
   useEffect(() => {
-    const cookie = jsCookie.get("cookieToken");
-    if (!cookie) {
-      dispatch(signOutAction());
-    }
+    // const cookie = jsCookie.get("cookieToken");
+    // if (!cookie) {
+    //   dispatch(signOutAction());
+    // }
     const fetchData = async () => {
       const response = await getAllProduct();
       // console.log(response.data);

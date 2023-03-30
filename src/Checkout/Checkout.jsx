@@ -52,7 +52,6 @@ function Checkout(props) {
   };
 
   useEffect(() => {
-    getCartByUserId();
     const getUserInfo = async () => {
       const response = await getInfo(userId);
       // console.log("response", response);
@@ -61,9 +60,11 @@ function Checkout(props) {
       setPhone(response.phone);
       setAddress(response.address || "");
     };
+    // Nếu đã có cookie đăng nhập từ server thì được phép lấy thông tin cart của user
     if (cookie == undefined) {
       navigate("/signin");
     } else {
+      getCartByUserId();
       getUserInfo();
     }
   }, []);
@@ -123,10 +124,10 @@ function Checkout(props) {
     }
   };
 
-  //Check Validation
+  // Nếu đã có cookie đăng nhập từ server thì được phép tạo order
   const handlerSubmit = () => {
     const isInputValid = inputValidation();
-    if (isInputValid) {
+    if (isInputValid && cookie) {
       console.log("Thanh Cong");
 
       // setLoad(!load);

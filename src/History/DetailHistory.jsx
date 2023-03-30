@@ -15,6 +15,7 @@ function DetailHistory() {
   const navigate = useNavigate();
   const cookie = jsCookie.get("cookieToken");
 
+  // Nếu đã có cookie đăng nhập từ server thì được phép lấy thông tin chi tiết order
   useEffect(() => {
     const fetchData = async () => {
       const response = await getOrderById(id);

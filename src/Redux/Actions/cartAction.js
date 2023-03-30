@@ -1,5 +1,3 @@
-import { CART } from "./Types/cartType";
-import { createAction } from ".";
 import { cartService } from "../Services/cartService";
 
 export const addToCart = async (data) => {

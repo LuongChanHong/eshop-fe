@@ -1,3 +1,4 @@
+import jsCookie from "js-cookie";
 import { userService } from "../Services/UserService";
 import { USER } from "./Types/userType";
 import { createAction } from ".";
@@ -32,6 +33,9 @@ export const signOutAction = () => {
     try {
       await userService.signOut();
       dispatch(createAction(USER.SIGN_OUT));
+      jsCookie.remove("cookieRole");
+      jsCookie.remove("cookieUserId");
+      jsCookie.remove("cookieToken");
     } catch (error) {
       console.log(error);
       alert(error.response.data);

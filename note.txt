@@ -1,3 +1,3 @@
 Update app:
-- gửi thông báo lỗi về tag network browser
-"send error message to network browser tab"
+- xét cookie trước khi gọi 1 số API
+"check cookies before calling some API"
